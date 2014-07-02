@@ -4,6 +4,7 @@
     "private": true,
     "description": "Web app for controlling presentations using smartphones and tablets",
     "dependencies": {
-        "express": "^4.4.5"
+        "express": "^4.4.5",
+        "socket.io": "^1.0.6"
     }
 }
