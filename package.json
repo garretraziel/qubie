@@ -3,6 +3,9 @@
     "version": "0.0.1",
     "private": true,
     "description": "Web app for controlling presentations using smartphones and tablets",
+    "scripts": {
+        "start": "node server.js"
+    },
     "dependencies": {
         "express": "^4.4.5",
         "socket.io": "^1.0.6"
