@@ -3,6 +3,7 @@
 var http = require('http');
 var https = require('https');
 var express = require('express');
+var favicon = require('serve-favicon');
 
 var configuration = require('./configuration');
 var secure = require('./lib/secure');
@@ -18,6 +19,7 @@ if (config.reverse_proxy) {
     app.enable('trust proxy');
 }
 
+app.use(favicon(__dirname + '/public/favicon.png'));
 app.all('*', secure.redirectSec);
 app.get('/', mainRouter);
 
