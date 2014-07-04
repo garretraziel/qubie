@@ -29,8 +29,14 @@ app.use(secure.redirectSec);
 app.use(favicon(__dirname + '/public/favicon.png'));
 app.use(cookieParser(config.secret));
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(session({store: sessionStore, secret: config.secret,
-    cookie: {secure: true}, proxy: true, resave: true, saveUninitialized: true}));
+app.use(session({
+    store: sessionStore,
+    secret: config.secret,
+    cookie: {secure: true},
+    proxy: true,
+    resave: true,
+    saveUninitialized: true
+}));
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', mainRouter);
@@ -39,7 +45,7 @@ module.exports.run = function () {
     if (config.ssl) {
         server = https.createServer(config.options, app);
     } else {
-        server = https.createServer(app);
+        server = http.createServer(app);
     }
 
     bcomm.init(server);
