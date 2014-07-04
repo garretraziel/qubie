@@ -14,7 +14,8 @@ var development = {
         key: fs.readFileSync(path.join(__dirname, "/misc/server.key")),
         cert: fs.readFileSync(path.join(__dirname, "/misc/server.crt"))
     },
-    secret: "this-is-really-a-secret!"
+    secret: "this-is-really-a-secret!",
+    public: path.join(__dirname, "public")
 };
 
 var production = {
@@ -27,7 +28,8 @@ var production = {
     port: process.env.OPENSHIFT_NODEJS_PORT,
     ssl: false,
     reverse_proxy: true,
-    secret: process.env.OPENSHIFT_SECRET_TOKEN
+    secret: process.env.OPENSHIFT_SECRET_TOKEN,
+    public: path.join(__dirname, "public")
 };
 
 module.exports = {
