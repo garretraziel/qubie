@@ -17,6 +17,7 @@ var development = {
     public: path.join(__dirname, "public")
 };
 
+// openshift
 /*var production = {
     redisSessionStoreConfig: {
         host: process.env.OPENSHIFT_REDIS_HOST,
@@ -31,12 +32,15 @@ var development = {
     public: path.join(__dirname, "public")
 };*/
 
+// heroku
 var production = {
     port: process.env.PORT,
     ssl: false,
     reverse_proxy: true,
     secret: process.env.SECRET_TOKEN,
-    public: path.join(__dirname, "public")
+    public: path.join(__dirname, "public"),
+    postgres_uri: process.env.HEROKU_POSTGRESQL_ROSE_URL,
+    redis_uri: process.env.REDISTOGO_URL
 };
 
 module.exports = {
