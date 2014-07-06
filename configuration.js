@@ -6,7 +6,6 @@ var development = {
         host: "localhost",
         port: 6379
     },
-    host: "0.0.0.0",
     port: 8080,
     ssl: true,
     reverse_proxy: false,
@@ -18,7 +17,7 @@ var development = {
     public: path.join(__dirname, "public")
 };
 
-var production = {
+/*var production = {
     redisSessionStoreConfig: {
         host: process.env.OPENSHIFT_REDIS_HOST,
         port: process.env.OPENSHIFT_REDIS_PORT,
@@ -30,6 +29,10 @@ var production = {
     reverse_proxy: true,
     secret: process.env.OPENSHIFT_SECRET_TOKEN,
     public: path.join(__dirname, "public")
+};*/
+
+var production = {
+    port: process.env.PORT,
 };
 
 module.exports = {

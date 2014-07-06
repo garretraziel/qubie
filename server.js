@@ -26,6 +26,6 @@ if (config.ssl) {
 
 bc11m.init(server);
 
-server.listen(config.port, config.host, function () {
-    console.log("App is running on " + config.host + " port " + config.port);
+server.listen(config.port, function () {
+    console.log("App is running on port " + config.port);
 });
