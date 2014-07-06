@@ -33,6 +33,10 @@ var development = {
 
 var production = {
     port: process.env.PORT,
+    ssl: false,
+    reverse_proxy: true,
+    secret: process.env.SECRET_TOKEN,
+    public: path.join(__dirname, "public")
 };
 
 module.exports = {
