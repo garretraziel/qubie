@@ -11,7 +11,7 @@ var development = {
     },
     secret: "this-is-really-a-secret!",
     public: path.join(__dirname, "public"),
-    postgres_url: "postgres://",
+    postgres_uri: "postgres://node:node@localhost:5432/node",
     redis_uri: "redis://localhost:6379"
 };
 
