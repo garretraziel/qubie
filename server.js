@@ -7,9 +7,10 @@ var http = require('http');
 var https = require('https');
 var express = require('express');
 
-var configuration = require('./configuration');
+var configuration = require('./configuration/configuration');
 var setup = require('./lib/setup');
 var bc11m = require('./lib/bc11n');
+var memdb = require('./lib/memdb');
 var models = require('./models');
 
 var app = express();
@@ -36,6 +37,8 @@ function runServer(app, config) {
 }
 
 db.sequelize.sync().complete(function (err) {
-    if (err) throw err[0];
-    else runServer(app, config);
+    if (err) {
+        throw err[0];
+    }
+    runServer(app, config);
 });

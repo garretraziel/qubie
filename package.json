@@ -16,7 +16,8 @@
         "connect-redis": "^2.0.0",
         "errorhandler": "^1.1.1",
         "sequelize": "^1.7.9",
-        "pg": "^3.3.0"
+        "pg": "^3.3.0",
+        "redis": "^0.10.3"
     },
     "engines": {
         "node": "0.10.x"
