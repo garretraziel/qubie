@@ -3,6 +3,7 @@ module.exports = function (sequelize, DataTypes) {
         username: DataTypes.STRING,
         password: DataTypes.STRING,
         premium: DataTypes.BOOLEAN,
-        premium_to: DataTypes.DATE
-    })
+        premium_to: DataTypes.DATE,
+        admin: DataTypes.BOOLEAN
+    });
 };

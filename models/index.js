@@ -1,25 +1,26 @@
+var path = require('path');
+
 module.exports = function (config) {
     if (!global.hasOwnProperty('db')) {
         var Sequelize = require('sequelize');
         var sequelize;
 
-        var match = config.postgres_uri.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/);
-        sequelize = new Sequelize(match[5], match[1], match[2], {
-            dialect: 'postgres',
-            protocol: 'postgres',
-            port: match[4],
-            host: match[3],
-            logging: false
-        });
+        sequelize = new Sequelize(config.postgres_uri);
 
         global.db = {
             Sequelize: Sequelize,
             sequelize: sequelize,
-            User: sequelize.import(__dirname + '/user'),
-            Document: sequelize.import(__dirname + '/document')
+            User: sequelize.import(path.join(__dirname, 'user')),
+            Document: sequelize.import(path.join(__dirname, 'document')),
+            Team: sequelize.import(path.join(__dirname, '/team')),
+            View: sequelize.import(path.join(__dirname, '/view'))
         };
 
         global.db.User.hasMany(global.db.Document);
+        global.db.Team.hasMany(global.db.User);
+        global.db.Document.hasMany(global.db.View);
+        global.db.Team.hasMany(global.db.Document);
+        // TODO: dodelat nejake restrikce nad databazi (unique, not null a tak)
     }
     return global.db;
 };
