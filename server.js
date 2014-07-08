@@ -16,12 +16,12 @@ var models = require('./models');
 var app = express();
 var config = configuration[app.get('env')];
 var db = models(config);
+var memstore = memdb(config);
+var server;
 
-function runServer(app, config) {
-    var server;
-
+function runServer() {
     setup.settings(app, config);
-    setup.routes(app);
+    setup.routes(app, db, memstore);
 
     if (config.ssl) {
         server = https.createServer(config.options, app);
@@ -29,7 +29,7 @@ function runServer(app, config) {
         server = http.createServer(app);
     }
 
-    bc11m.init(server);
+    bc11m.init(server, memstore);
 
     server.listen(config.port, function () {
         console.log("App is running on port " + config.port);
@@ -40,5 +40,5 @@ db.sequelize.sync().complete(function (err) {
     if (err) {
         throw err[0];
     }
-    runServer(app, config);
+    runServer();
 });
