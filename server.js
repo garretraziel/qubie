@@ -16,7 +16,7 @@ var models = require('./models');
 var app = express();
 var config = configuration[app.get('env')];
 var db = models(config);
-var memstore = memdb(config);
+var memstore = memdb.init(config);
 var server;
 
 function runServer() {
