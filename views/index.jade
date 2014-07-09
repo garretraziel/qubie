@@ -1,20 +1,7 @@
-extends base
+extends base_page
 
-block head
-    title qb main page
+block title
+    | qb main page
 
 block content
-    header
-        #navbar
-            nav
-                .left
-                    a(href="/")
-                        img(src="/favicon.png")
-                .right
-                    a(href="/about") About
-                    | |
-                    a(href="/pricing") Pricing
-                    | |
-                    a(href="/login") Login/Sign up
-    .content
-        | Hello, world!
+    P Hello, world!
