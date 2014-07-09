@@ -1,3 +1,24 @@
+extends base
+
 block title
     | qb
 
+block body
+    .header-container
+        header.wrapper.clearfix
+            h1.title qb
+            nav
+                ul
+                    li: a(href="#") about
+                    li: a(href="#") pricing
+                    li: a(href="#") login
+
+    block before_content
+
+    .main-contaier
+        .main.wrapper.clearfix
+            block content
+
+    .footer-container
+        footer.wrapper
+            | Garret made it

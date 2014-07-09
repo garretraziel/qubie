@@ -1,5 +1,8 @@
 /*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
 
+@import url(//fonts.googleapis.com/css?family=Source+Sans+Pro&subset=latin,latin-ext);
+@import url(//fonts.googleapis.com/css?family=PT+Sans);
+
 html,
 button,
 input,
@@ -14,12 +17,12 @@ html {
 }
 
 ::-moz-selection {
-    background: #b3d4fc;
+    background: #ffe4aa;
     text-shadow: none;
 }
 
 ::selection {
-    background: #b3d4fc;
+    background: #ffe4aa;
     text-shadow: none;
 }
 
@@ -63,6 +66,7 @@ textarea {
 
 body {
     font: 16px/26px Helvetica, Helvetica Neue, Arial;
+    background: #2a2a2a;
 }
 
 .wrapper {
@@ -70,27 +74,30 @@ body {
     margin: 0 5%;
 }
 
-/* ===================
-    ALL: Orange Theme
-   =================== */
-
 .header-container {
-    border-bottom: 20px solid #e44d26;
+    /*border-bottom: 1px solid #ff5e51;*/
+    background: #3EABBB;
+    line-height: 0;
 }
 
-.footer-container,
-.main aside {
-    border-top: 20px solid #e44d26;
+.footer-container {
+    /*border-top: 1px solid #ff5e51;*/
 }
 
 .header-container,
 .footer-container,
 .main aside {
-    background: #f16529;
+    /*background: #236267;*/
+}
+
+.footer-container {
+    background: #3EABBB;
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 .title {
     color: white;
+    font-family: 'PT Sans', sans-serif;
 }
 
 /* ==============
@@ -112,16 +119,12 @@ nav a {
     font-weight: bold;
 
     color: white;
-    background: #e44d26;
-}
-
-nav a:hover,
-nav a:visited {
-    color: white;
+    font-family: 'Source Sans Pro', sans-serif;
+    /*background: #801b15;*/
 }
 
 nav a:hover {
-    text-decoration: underline;
+    color: #ffc851;
 }
 
 /* ==============
@@ -138,7 +141,7 @@ nav a:hover {
 
 .main aside {
     color: white;
-    padding: 0px 5% 10px;
+    padding: 0 5% 10px;
 }
 
 .footer-container footer {
@@ -157,7 +160,9 @@ nav a:hover {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-
+.fullwide {
+    width: 100%;
+}
 
 
 
@@ -187,7 +192,6 @@ nav a:hover {
         width: 27%;
         margin: 0 1.7%;
         padding: 25px 2%;
-        margin-bottom: 0;
     }
 
     nav li:first-child a {
@@ -212,17 +216,6 @@ nav a:hover {
 }
 
 @media only screen and (min-width: 768px) {
-
-/* ====================
-    WIDE: CSS3 Effects
-   ==================== */
-
-    .header-container,
-    .main aside {
-        -webkit-box-shadow: 0 5px 10px #aaa;
-           -moz-box-shadow: 0 5px 10px #aaa;
-                box-shadow: 0 5px 10px #aaa;
-    }
 
 /* ============
     WIDE: Menu
