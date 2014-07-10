@@ -1,12 +1,10 @@
 extends base_page
 
-block title
-    | qb login
-
 block content
-    .login-form
+    .register-form
         form(method="post")
             input(type="text", placeholder="username", name="username", autofocus, required)
             input(type="password", placeholder="password", name="password", required)
-            input(type="submit", value="Log in")
-    a(href="/register") Register
+            input(type="password", placeholder="repeat", required)
+            input(type="text", placeholder="email", name="email", required)
+            input(type="submit", value="Register")

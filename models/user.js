@@ -4,6 +4,7 @@ module.exports = function (sequelize, DataTypes) {
         password: DataTypes.STRING,
         premium: DataTypes.BOOLEAN,
         premium_to: DataTypes.DATE,
-        admin: DataTypes.BOOLEAN
+        admin: DataTypes.BOOLEAN,
+        quota: DataTypes.FLOAT
     });
 };

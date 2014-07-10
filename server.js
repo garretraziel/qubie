@@ -20,7 +20,7 @@ var memstore = memdb.init(config);
 var server;
 
 function runServer() {
-    setup.settings(app, config);
+    setup.settings(app, config, db);
     setup.routes(app, db, memstore);
 
     if (config.ssl) {
