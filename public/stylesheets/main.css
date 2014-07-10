@@ -1,6 +1,6 @@
 /*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
 
-@import url(//fonts.googleapis.com/css?family=Source+Sans+Pro&subset=latin,latin-ext);
+@import url(//fonts.googleapis.com/css?family=Source+Sans+Pro|Libre+Baskerville&subset=latin,latin-ext);
 @import url(//fonts.googleapis.com/css?family=PT+Sans);
 
 html,
@@ -14,6 +14,7 @@ textarea {
 html {
     font-size: 1em;
     line-height: 1.4;
+    overflow-y: scroll;
 }
 
 ::-moz-selection {
@@ -65,7 +66,12 @@ textarea {
    ========================================================================== */
 
 body {
-    font: 16px/26px Helvetica, Helvetica Neue, Arial;
+    font: 16px/26px 'Libre Baskerville', Helvetica, Helvetica Neue, Arial;
+    background: white;
+    text-align: justify;
+}
+
+.jumbotron-container {
     background: #2a2a2a;
 }
 
@@ -164,17 +170,35 @@ nav a:hover {
     width: 100%;
 }
 
+.centered {
+    display: block;
+    margin: 0 auto;
+}
 
+.icon {
+    margin: 0 1em;
+}
 
+.feature {
+    display: block;
+    margin-bottom: 10px;
+    padding: 15px 0;
+    width: 100%;
+}
 
+.features-container {
+    padding: 0;
+}
 
+.feature h2 {
+    line-height: 1.5;
+    text-align: left;
+}
 
-
-
-
-
-
-
+.login-form {
+    margin: 0 auto;
+    width: 50%;
+}
 
 
 /* ==========================================================================
@@ -213,6 +237,7 @@ nav a:hover {
     .oldie nav a {
         margin: 0 0.7%;
     }
+
 }
 
 @media only screen and (min-width: 768px) {
@@ -242,6 +267,13 @@ nav a:hover {
     .main aside {
         float: right;
         width: 28%;
+    }
+
+    .feature {
+        padding: 0 15px;
+        float: left;
+        width: 45%;
+        /*height: 350px;*/
     }
 }
 

@@ -9,9 +9,15 @@ block body
             h1.title qb
             nav
                 ul
-                    li: a(href="#") about
-                    li: a(href="#") pricing
-                    li: a(href="#") login
+                    li: a(href="/about")
+                            span.fa.fa-info-circle.icon
+                            | about
+                    li: a(href="/pricing")
+                            span.fa.fa-money.icon
+                            | pricing
+                    li: a(href="/login")
+                            span.fa.fa-user.icon
+                            | login
 
     block before_content
 
