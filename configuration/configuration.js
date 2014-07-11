@@ -13,7 +13,8 @@ var development = {
     public: path.join(__dirname, "../public"),
     views: path.join(__dirname, "../views"),
     postgres_uri: "postgres://node:node@localhost:5432/node",
-    redis_uri: "redis://localhost:6379"
+    redis_uri: "redis://localhost:6379",
+    logging: true
 };
 
 // heroku
@@ -25,7 +26,8 @@ var production = {
     public: path.join(__dirname, "../public"),
     views: path.join(__dirname, "../views"),
     postgres_uri: process.env.HEROKU_POSTGRESQL_ROSE_URL,
-    redis_uri: process.env.REDISTOGO_URL
+    redis_uri: process.env.REDISTOGO_URL,
+    logging: false
 };
 
 module.exports = {
