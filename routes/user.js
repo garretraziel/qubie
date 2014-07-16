@@ -1,8 +1,10 @@
 var express = require('express');
 var AWS = require('aws-sdk');
 var multiparty = require('multiparty');
+var shortId = require('shortid');
+var fs = require('fs');
 
-module.exports = function (db, memstore) {
+module.exports = function (config, db, memstore) {
     var router = express.Router();
 
     router.use(function (req, res, next) {
@@ -24,7 +26,11 @@ module.exports = function (db, memstore) {
 
         form.parse(req, function (err, fields, files) {
             // TODO: upload do aws, cteni/zapis do databaze
-            res.redirect('/upload');
+            var id = shortId.generate();
+            var out = fs.createWriteStream("out.out");
+            files['file'][0].createReadStream().pipe(out);
+
+            res.redirect('back');
         });
     });
 

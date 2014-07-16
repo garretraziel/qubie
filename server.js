@@ -21,7 +21,7 @@ var server;
 
 function runServer() {
     setup.settings(app, config, db);
-    setup.routes(app, db, memstore);
+    setup.routes(app, config, db, memstore);
 
     if (config.ssl) {
         server = https.createServer(config.options, app);

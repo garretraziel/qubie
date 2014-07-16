@@ -1,4 +1,7 @@
 extends ../base_page
 
 block content
-    | Upload.
+    .upload-form
+        form(method="post", enctype="multipart/form-data")
+            input(type="file", name="file")
+            input(type="Submit", value="Upload")
