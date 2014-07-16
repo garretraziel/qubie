@@ -22,7 +22,6 @@
         "pg": "^3.3.0",
         "redis": "^0.10.3",
         "sequelize": "^1.7.9",
-        "serve-favicon": "^2.0.1",
         "socket.io": "^1.0.6"
     },
     "engines": {

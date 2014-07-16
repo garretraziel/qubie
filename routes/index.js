@@ -13,8 +13,8 @@ module.exports = function (db, passport) {
     });
     router.post('/login', passport.authenticate('local', {
         successRedirect: '/user',
-        failureRedirect: '/login',
-        failureFlash: true // TODO: flash uz neni
+        failureRedirect: '/login'
+        //failureFlash: true // TODO: flash uz neni
     }));
     router.get('/register', function (req, res) {
         res.render('register');
