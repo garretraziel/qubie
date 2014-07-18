@@ -16,7 +16,9 @@ module.exports = function (config, db, memstore) {
     });
 
     router.get('/', function (req, res) {
-        res.render('user', {username: req.user.username});
+        req.user.getDocuments().success(function (documents) {
+            res.render('user', {documents: documents});
+        });
     });
     router.get('/upload', function (req, res) {
         res.render('user/upload');
@@ -45,10 +47,11 @@ module.exports = function (config, db, memstore) {
                     if (err) {
                         console.error("ERR S3:", err); // TODO: resit nejak vic
                     } else {
-                        console.log(data);
                         db.Document.create({
                             // TODO: url ziskat nejak rozumnejic
-                            url: "https://" + config.aws_bucket + ".s3.amazonaws.com/" + id
+                            url: "https://" + config.aws_bucket + ".s3.amazonaws.com/" + id,
+                            id: id,
+                            name: part.filename
                         }).success(function (document) {
                             document.setUser(req.user);
                         });
@@ -62,6 +65,10 @@ module.exports = function (config, db, memstore) {
         });
 
         form.parse(req);
+    });
+    router.get('/logout', function (req, res) {
+        req.logout();
+        res.redirect('/');
     });
 
     return router;

@@ -1,4 +1,9 @@
-extends ../base_page
+extends base_user
 
 block content
-    | Welcome #{username}.
+    if documents.length > 0
+        ul
+            each document in documents
+                li: a(href=document.url)= document.name
+    else
+        p Nutin.

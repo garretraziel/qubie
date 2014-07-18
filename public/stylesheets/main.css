@@ -86,6 +86,11 @@ body {
     line-height: 0;
 }
 
+.submenu-container {
+    line-height: 0;
+    border-bottom: 1px solid #3EABBB;
+}
+
 .footer-container {
     /*border-top: 1px solid #ff5e51;*/
 }
@@ -110,12 +115,14 @@ body {
     MOBILE: Menu
    ============== */
 
-nav ul {
+.submenu-container nav ul,
+.header-container nav ul {
     margin: 0;
     padding: 0;
 }
 
-nav a {
+.submenu-container nav a,
+.header-container nav a {
     display: block;
     margin-bottom: 10px;
     padding: 15px 0;
@@ -124,12 +131,20 @@ nav a {
     text-decoration: none;
     font-weight: bold;
 
-    color: white;
     font-family: 'Source Sans Pro', sans-serif;
     /*background: #801b15;*/
 }
 
-nav a:hover {
+.header-container nav a {
+    color: white;
+}
+
+.submenu-container nav a {
+    color: #3EABBB;
+}
+
+.submenu-container nav a:hover,
+.header-container nav a:hover {
     color: #ffc851;
 }
 
@@ -211,18 +226,28 @@ nav a:hover {
     INTERMEDIATE: Menu
    ==================== */
 
-    nav a {
+    .submenu-container nav a,
+    .header-container nav a {
         float: left;
-        width: 27%;
         margin: 0 1.7%;
         padding: 25px 2%;
     }
 
-    nav li:first-child a {
+    .header-container nav a {
+        width: 27%;
+    }
+
+    .submenu-container nav a {
+        width: 18%;
+    }
+
+    .submenu-container nav li:first-child a,
+    .header-container nav li:first-child a {
         margin-left: 0;
     }
 
-    nav li:last-child a {
+    .submenu-container nav li:last-child a,
+    .header-container nav li:last-child a {
         margin-right: 0;
     }
 
@@ -230,11 +255,13 @@ nav a:hover {
     INTERMEDIATE: IE Fixes
    ======================== */
 
-    nav ul li {
+    .submenu-container nav ul li,
+    .header-container nav ul li {
         display: inline;
     }
 
-    .oldie nav a {
+    .submenu-container .oldie nav a,
+    .header-container .oldie nav a {
         margin: 0 0.7%;
     }
 
@@ -250,9 +277,9 @@ nav a:hover {
         float: left;
     }
 
-    nav {
+    .header-container nav {
         float: right;
-        width: 38%;
+        width: 420px;
     }
 
 /* ============

@@ -1,0 +1,19 @@
+extends ../base_page
+
+block before_content
+    .submenu-container
+        .wrapper.clearfix
+            nav
+                ul
+                    li: a(href="/user")
+                        span.fa.fa-folder.icon
+                        | index
+                    li: a(href="/user/upload")
+                        span.fa.fa-upload.icon
+                        | upload
+                    li: a(href="/user/settings")
+                        span.fa.fa-cogs.icon
+                        | settings
+                    li: a(href="/user/logout")
+                        span.fa.fa-power-off.icon
+                        | logout
