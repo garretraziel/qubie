@@ -4,6 +4,6 @@ block content
     if documents.length > 0
         ul
             each document in documents
-                li: a(href=document.url)= document.name
+                li: a(href="/user/"+document.id)= document.name
     else
         p Nutin.

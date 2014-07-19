@@ -6,12 +6,21 @@ var fs = require('fs');
 
 module.exports = function (config, db, memstore) {
     var router = express.Router();
+    var s3bucket = new AWS.S3({params: {Bucket: config.aws_bucket}});
 
     router.use(function (req, res, next) {
         if (req.isAuthenticated()) {
             next();
         } else {
             res.redirect('/login'); // TODO: flash a navrat zpet
+        }
+    });
+    router.param('document_id', function (req, res, next, document_id) {
+        var regex = /^\d+$/;
+        if (regex.test(document_id)) {
+            next();
+        } else {
+            next('route');
         }
     });
 
@@ -26,7 +35,6 @@ module.exports = function (config, db, memstore) {
     router.post('/upload', function (req, res) {
         var form = new multiparty.Form(); // TODO: asi nejdriv nejaka bezpecnost
         // TODO: uklizet soubory
-        var s3bucket = new AWS.S3({params: {Bucket: config.aws_bucket}});
         // TODO: upload do aws, cteni/zapis do databaze
 
         form.on('part', function (part) {
@@ -50,7 +58,7 @@ module.exports = function (config, db, memstore) {
                         db.Document.create({
                             // TODO: url ziskat nejak rozumnejic
                             url: "https://" + config.aws_bucket + ".s3.amazonaws.com/" + id,
-                            id: id,
+                            key: id,
                             name: part.filename
                         }).success(function (document) {
                             document.setUser(req.user);
@@ -69,6 +77,25 @@ module.exports = function (config, db, memstore) {
     router.get('/logout', function (req, res) {
         req.logout();
         res.redirect('/');
+    });
+    router.get('/:document_id', function (req, res) {
+        db.Document.find(req.params.document_id).success(function (document) {
+            document.getUser().success(function (result) {
+                if (result.id === req.user.id) {
+                    var params = {Key: document.key, Expires: 60}; // TODO: je to dost expires? nebo neni to moc?
+                    s3bucket.getSignedUrl('getObject', params, function (err, url) {
+                        if (err) {
+                            console.error("ERR: Cannot get signed url:", err);
+                            res.redirect('/fail');
+                        } else {
+                            res.render('user/root', {ID: req.params.document_id, url: url});
+                        }
+                    });
+                } else {
+                    res.redirect('/fail');
+                }
+            });
+        });
     });
 
     return router;

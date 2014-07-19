@@ -6,7 +6,7 @@ module.exports = function (config) {
         var sequelize;
 
         sequelize = new Sequelize(config.postgres_uri, {
-            logging: console.log
+            logging: false
         });
 
         global.db = {

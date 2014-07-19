@@ -29,7 +29,7 @@ function runServer() {
         server = http.createServer(app);
     }
 
-    bc11m.init(server, memstore);
+    bc11m.init(server, db, memstore);
 
     server.listen(config.port, function () {
         console.log("App is running on port " + config.port);

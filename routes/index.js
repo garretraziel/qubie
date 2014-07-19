@@ -35,6 +35,9 @@ module.exports = function (db, passport) {
             });
         });
     });
+    router.get('/fail', function (req, res) {
+        res.render('fail');
+    });
 
     return router;
 };
