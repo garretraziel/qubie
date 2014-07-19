@@ -50,14 +50,13 @@ module.exports = function (config, db, memstore) {
                 s3bucket.putObject({
                     Key: id,
                     Body: part,
-                    ACL: 'public-read' // TODO: asi nejake signed url
+                    ACL: 'private' // TODO: asi nejake signed url
                 }, function (err, data) {
                     if (err) {
                         console.error("ERR S3:", err); // TODO: resit nejak vic
                     } else {
                         db.Document.create({
                             // TODO: url ziskat nejak rozumnejic
-                            url: "https://" + config.aws_bucket + ".s3.amazonaws.com/" + id,
                             key: id,
                             name: part.filename
                         }).success(function (document) {
