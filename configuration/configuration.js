@@ -19,7 +19,7 @@ var development = {
 };
 
 // heroku
-var production = {
+var heroku = {
     port: process.env.PORT,
     ssl: false,
     reverse_proxy: true,
@@ -32,7 +32,21 @@ var production = {
     aws_bucket: "qubie"
 };
 
+var production = {
+    port: 5102,
+    ssl: false,
+    reverse_proxy: true,
+    secret: process.env.SECRET_TOKEN,
+    public: path.join(__dirname, "../public"),
+    views: path.join(__dirname, "../views"),
+    postgres_url: process.env.POSTGRES_URL,
+    redis_url: process.env.REDIS_URL,
+    logging: false,
+    aws_bucket: "qubie"
+};
+
 module.exports = {
     "development": development,
-    "production": production
+    "production": production,
+    "heroku": heroku
 };
