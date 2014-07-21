@@ -39,8 +39,8 @@ var production = {
     secret: process.env.SECRET_TOKEN,
     public: path.join(__dirname, "../public"),
     views: path.join(__dirname, "../views"),
-    postgres_url: process.env.POSTGRES_URL,
-    redis_url: process.env.REDIS_URL,
+    postgres_uri: process.env.POSTGRES_URL,
+    redis_uri: process.env.REDIS_URL,
     logging: false,
     aws_bucket: "qubie"
 };
