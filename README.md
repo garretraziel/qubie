@@ -8,3 +8,5 @@ Requirements
 - Node.js
 - MongoDB
 - Redis
+- enabled WebSockets
+- libreoffice with headless plugin for converting ppt -> pdf

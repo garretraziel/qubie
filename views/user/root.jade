@@ -1,4 +1,21 @@
 extends ../base
 
+block title
+    | qb -
+    = name
+
 block body
-    a(href=url)= ID
+    canvas#cnvs(width="300", height="150")
+        | Unfortunately, your browser doesn't support HTML5 canvas.
+
+block scripts
+    script
+        | var ID = "
+        != ID
+        | ";
+        | var URL = "
+        != url
+        | ";
+    script(src="/bower_components/pdfjs-bower/dist/compatibility.js")
+    script(src="/bower_components/pdfjs-bower/dist/pdf.js")
+    script(src="/javascript/root_view.js")

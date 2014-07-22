@@ -1,0 +1,23 @@
+{
+    "name": "qb",
+    "version": "0.0.1",
+    "authors": [
+        "garretraziel <boloomka@gmail.com>"
+    ],
+    "description": "Web app for controlling presentations using smartphones and tablets",
+    "moduleType": [
+        "node"
+    ],
+    "license": "MIT",
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "pdfjs-bower": "~1.0.233"
+    }
+}

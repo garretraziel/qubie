@@ -87,7 +87,11 @@ module.exports = function (config, db, memstore) {
                             console.error("ERR: Cannot get signed url:", err);
                             res.redirect('/fail');
                         } else {
-                            res.render('user/root', {ID: req.params.document_id, url: url});
+                            res.render('user/root', {
+                                ID: req.params.document_id,
+                                url: url,
+                                name: document.name
+                            });
                         }
                     });
                 } else {
