@@ -1,8 +1,5 @@
 $(document).ready(function () {
-    console.log("document ready");
-    console.log(URL);
     PDFJS.getDocument(URL).then(function (pdf) {
-        console.log("pdf ready");
         pdf.getPage(1).then(function (page) {
             var scale = 1.5;
             var viewport = page.getViewport(scale);
@@ -17,7 +14,6 @@ $(document).ready(function () {
                 viewport: viewport
             };
 
-            console.log("got page");
             page.render(renderContext).then(function () {
                 console.log("ready");
             });
