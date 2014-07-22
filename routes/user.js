@@ -81,19 +81,22 @@ module.exports = function (config, db, memstore) {
         db.Document.find(req.params.document_id).success(function (document) {
             document.getUser().success(function (result) {
                 if (result.id === req.user.id) {
-                    var params = {Key: document.key, Expires: 60}; // TODO: je to dost expires? nebo neni to moc?
-                    s3bucket.getSignedUrl('getObject', params, function (err, url) {
-                        if (err) {
-                            console.error("ERR: Cannot get signed url:", err);
-                            res.redirect('/fail');
-                        } else {
-                            res.render('user/root', {
-                                ID: req.params.document_id,
-                                url: url,
-                                name: document.name
-                            });
-                        }
+                    res.render('user/root', {
+                        ID: req.params.document_id,
+                        name: document.name
                     });
+                } else {
+                    res.redirect('/fail');
+                }
+            });
+        });
+    });
+    router.get('/:document_id/document', function (req, res) {
+        db.Document.find(req.params.document_id).success(function (document) {
+            document.getUser().success(function (result) {
+                if (result.id === req.user.id) {
+                    var params = {Key: document.key};
+                    s3bucket.getObject(params).createReadStream().pipe(res);
                 } else {
                     res.redirect('/fail');
                 }

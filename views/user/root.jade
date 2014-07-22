@@ -1,20 +1,15 @@
 extends ../base
 
 block title
-    | qb -
-    = name
+    | qb - #{name}
 
 block body
     canvas#cnvs(width="300", height="150")
         | Unfortunately, your browser doesn't support HTML5 canvas.
 
 block scripts
-    script
-        | var ID = "
-        != ID
-        | "; var URL = "
-        != url
-        | ";
+    script.
+        var ID = "#{ID}"; var URL = "/user/#{ID}/document";
     script(src="/bower_components/pdfjs-bower/dist/compatibility.js")
     script(src="/bower_components/pdfjs-bower/dist/pdf.js")
     script(src="/socket.io/socket.io.js")

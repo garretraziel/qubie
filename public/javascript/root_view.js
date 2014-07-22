@@ -14,9 +14,7 @@ $(document).ready(function () {
                 viewport: viewport
             };
 
-            page.render(renderContext).then(function () {
-                console.log("ready");
-            });
+            page.render(renderContext);
         });
     });
 });
