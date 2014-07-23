@@ -111,6 +111,11 @@ body {
     font-family: 'PT Sans', sans-serif;
 }
 
+.title a {
+    text-decoration: none;
+    color: white;
+}
+
 /* ==============
     MOBILE: Menu
    ============== */

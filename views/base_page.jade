@@ -6,7 +6,7 @@ block title
 block body
     .header-container
         header.wrapper.clearfix
-            h1.title qb
+            h1.title: a(href="/") qb
             nav
                 ul
                     li: a(href="/about")
@@ -25,6 +25,10 @@ block body
                                 = username
 
     block before_content
+
+    if flash
+        .flash-container
+            p(class=flash.type)= flash.content
 
     .main-contaier
         .main.wrapper.clearfix
