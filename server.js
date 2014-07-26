@@ -33,7 +33,7 @@ function runServer() {
         server = http.createServer(app);
     }
 
-    bc11m.init(server, db, memstore, sessionStore);
+    bc11m.init(server, config, db, memstore, sessionStore);
 
     server.listen(config.port, function () {
         console.log("App is running on port " + config.port);

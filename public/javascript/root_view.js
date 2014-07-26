@@ -1,3 +1,4 @@
+var socket = io();
 var canvas = document.getElementById('cnvs');
 var context = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -19,6 +20,10 @@ function rerenderPage() {
         render_promise = loaded_page.render(renderContext);
     }
 }
+
+socket.on('connect', function () {
+    socket.emit('join', {role: 'root'});
+});
 
 $(document).ready(function () {
     PDFJS.getDocument(URL).then(function (pdf) {
