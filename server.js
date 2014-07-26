@@ -6,6 +6,8 @@
 var http = require('http');
 var https = require('https');
 var express = require('express');
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 
 var configuration = require('./configuration/configuration');
 var setup = require('./lib/setup');
@@ -20,7 +22,9 @@ var memstore = memdb.init(config);
 var server;
 
 function runServer() {
-    setup.settings(app, config, db);
+    var sessionStore = new RedisStore({url: config.redis_uri});
+
+    setup.settings(app, config, db, sessionStore);
     setup.routes(app, config, db, memstore);
 
     if (config.ssl) {
@@ -29,7 +33,7 @@ function runServer() {
         server = http.createServer(app);
     }
 
-    bc11m.init(server, db, memstore);
+    bc11m.init(server, db, memstore, sessionStore);
 
     server.listen(config.port, function () {
         console.log("App is running on port " + config.port);
