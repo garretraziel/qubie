@@ -22,7 +22,7 @@ function rerenderPage() {
 }
 
 socket.on('connect', function () {
-    socket.emit('join', {role: 'root'});
+    socket.emit('join', {role: 'root', document: ID});
 });
 
 $(document).ready(function () {

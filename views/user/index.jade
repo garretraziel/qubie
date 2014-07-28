@@ -4,6 +4,12 @@ block content
     if documents.length > 0
         ul
             each document in documents
-                li: a(href="/user/"+document.id)= document.name
+                li
+                    a(href="/user/"+document.id)= document.name
+                    span(id=document.id + "_counter")
     else
         p Nutin.
+
+block scripts
+    script(src="/socket.io/socket.io.js")
+    script(src="/javascript/lister.js")
