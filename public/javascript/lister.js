@@ -12,4 +12,10 @@ $(document).ready(function () {
             return +val - 1;
         });
     });
+    socket.on('deleted', function (document_id) {
+        $("#" + document_id + "_item").remove();
+    });
+    $('.deleter').click(function () {
+        socket.emit('delete', $(this).attr("document"));
+    });
 });

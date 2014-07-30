@@ -4,9 +4,10 @@ block content
     if documents.length > 0
         ul
             each document in documents
-                li
+                li.document-item(id=document.id + "_item")
                     a(href="/user/"+document.id)= document.name
                     span(id=document.id + "_counter")
+                    span.fa.fa-trash-o.deleter(document=document.id)
     else
         p Nutin.
 
