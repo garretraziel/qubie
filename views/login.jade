@@ -8,5 +8,6 @@ block content
         form(method="post")
             input(type="text", placeholder="username", name="username", autofocus, required)
             input(type="password", placeholder="password", name="password", required)
+            input(type="hidden", name="_csrf", value=csrftoken)
             input(type="submit", value="Log in")
     a(href="/register") Register

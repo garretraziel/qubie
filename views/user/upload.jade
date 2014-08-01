@@ -2,6 +2,6 @@ extends base_user
 
 block content
     .upload-form
-        form(method="post", enctype="multipart/form-data")
+        form(method="post", enctype="multipart/form-data", action="?_csrf=#{csrf_url}")
             input(type="file", name="file")
             input(type="Submit", value="Upload")
