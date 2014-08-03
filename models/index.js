@@ -20,12 +20,15 @@ module.exports = function (config) {
 
         global.db.User.hasMany(global.db.Document);
         global.db.Document.belongsTo(global.db.User);
+
         global.db.Team.hasMany(global.db.User);
         global.db.User.belongsTo(global.db.Team);
+
+        global.db.Team.hasOne(global.db.User, {as: "Administrator"});
+        global.db.User.belongsTo(global.db.Team, {as: "AdministredTeam"});
+
         global.db.Document.hasMany(global.db.View);
         global.db.View.belongsTo(global.db.Document);
-        global.db.Team.hasMany(global.db.Document);
-        global.db.Document.belongsTo(global.db.Team);
         // TODO: dodelat nejake restrikce nad databazi (unique, not null a tak)
     }
     return global.db;
