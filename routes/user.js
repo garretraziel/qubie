@@ -73,10 +73,6 @@ module.exports = function (config, db, memstore) {
 
         form.parse(req);
     });
-    router.get('/logout', function (req, res) {
-        req.logout();
-        res.redirect('/');
-    });
     router.get('/:document_id', function (req, res) {
         db.Document.find(req.params.document_id).success(function (document) {
             document.getUser().success(function (result) {

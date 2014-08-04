@@ -16,6 +16,10 @@ module.exports = function (db, passport) {
         failureRedirect: '/login'
         //failureFlash: true // TODO: flash uz neni
     }));
+    router.get('/logout', function (req, res) {
+        req.logout();
+        res.redirect('/');
+    });
     router.get('/register', function (req, res) {
         res.render('register');
     });
