@@ -1,0 +1,38 @@
+extends base_admin
+
+block content
+    if user
+        table
+            tr
+                td(align="right"): b Name
+                td(align="left")= user.username
+            tr
+                td(align="right"): b Email
+                td(align="left")= user.email
+            if user.premium
+                tr
+                    td(align="right"): b Premium
+                    td(align="left") true
+                tr
+                    td(align="right"): b Premium untill
+                    td(align="left")= user.premium_to
+            else
+                tr
+                    td(align="right"): b Premium
+                    td(align="left") false
+            if user.admin
+                tr
+                    td(align="right"): b Admin
+                    td(align="left") true
+            else
+                tr
+                    td(align="right"): b Admin
+                    td(align="left") false
+            tr
+                td(align="right"): b Quota
+                td(align="left")= user.quota
+            tr
+                td(align="right"): b Space used
+                td(align="left")= user.used_space
+    else
+        p User was not found!

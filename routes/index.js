@@ -28,9 +28,11 @@ module.exports = function (db, passport) {
             db.User.create({
                 username: req.body.username,
                 password: hash,
+                email: req.body.email,
                 premium: false,
                 admin: false,
-                quota: 0 // TODO: quota!
+                quota: 0, // TODO: quota!
+                used_space: 0
             }).success(function () {
                 res.redirect('/login'); // TODO: flash!
             }).failure(function (err) {

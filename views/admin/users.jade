@@ -1,1 +1,14 @@
 extends base_admin
+
+block content
+    .search-form
+        form(method="get")
+            input(type="text", placeholder="Name (fuzzy)", name="search_name", autofocus)
+            input(type="text", placeholder="Email", name="search_email")
+            input(type="submit", value="Search")
+    if users && users.length > 0
+        ul
+            each user in users
+                li.user-item: a(href="/admin/user/" + user.id)= user.username
+    else
+        p Nutin.
