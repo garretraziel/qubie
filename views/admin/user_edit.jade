@@ -1,0 +1,28 @@
+extends base_admin
+
+block content
+    if user
+        form(method="post")
+            p
+                b Name
+                input(type="text", name="username", value=user.username)
+            p
+                b Email
+                input(type="email", name="email", value=user.email)
+            p
+                b Premium
+                input(type="checkbox", name="premium", checked=user.premium)
+            p
+                b Premium untill
+                input(type="datetime", name="premium_to", value=user.premium_to)
+            p
+                b Admin
+                input(type="checkbox", name="admin", checked=user.admin)
+            p
+                b Quota
+                input(type="text", name="quota", value=user.quota)
+            input(type="hidden", name="_csrf", value=csrftoken)
+            p
+                input(type="submit", value="Save")
+    else
+        p User was not found!
