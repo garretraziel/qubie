@@ -40,6 +40,27 @@ socket.on('connect', function () {
     socket.emit('join', {role: 'root', document: ID});
 });
 
+socket.on('auth_presenter', function (name) {
+    vex.dialog.open({
+        message: "Presenter " + name + " connected. Password:", // TODO: tady hrozi nejaky JavaScript injection
+        input: '<input name="pin" type="password">',
+        buttons: [
+            $.extend({}, vex.dialog.button.YES, {
+                text: 'Confirm'
+            }), $.extend({}, vex.dialog.button.NO, {
+                text: 'Reject'
+            })
+        ],
+        callback: function (data) {
+            if (data === false) {
+                socket.emit('auth_response', {outcome: false});
+            } else {
+                socket.emit('auth_response', {outcome: true, passwd: data.pin});
+            }
+        }
+    });
+});
+
 $(document).ready(function () {
     PDFJS.getDocument(URL).then(function (pdf) {
         loaded_pdf = pdf;

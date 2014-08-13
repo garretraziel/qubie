@@ -2,6 +2,8 @@ extends ../base
 
 append head
     link(rel="stylesheet", href="/stylesheets/root_view.css")
+    link(rel="stylesheet", href="/bower_components/vex/css/vex.css")
+    link(rel="stylesheet", href="/bower_components/vex/css/vex-theme-os.css")
 
 block title
     | qb - #{name}
@@ -15,5 +17,8 @@ block scripts
         var ID = !{ JSON.stringify(ID) }; var URL = "/user/" + ID + "/document";
     script(src="/bower_components/pdfjs-bower/dist/compatibility.js")
     script(src="/bower_components/pdfjs-bower/dist/pdf.js")
+    script(src="/bower_components/vex/js/vex.combined.min.js")
+    script.
+        vex.defaultOptions.className = 'vex-theme-os';
     script(src="/socket.io/socket.io.js")
     script(src="/javascript/root_view.js")
