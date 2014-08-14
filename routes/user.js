@@ -47,23 +47,28 @@ module.exports = function (config, db, memstore) {
 
             if (part.filename !== null) {
                 part.length = part.byteCount; // TODO: jak je to presne s velikosti?
-                s3bucket.putObject({
-                    Key: id,
-                    Body: part,
-                    ACL: 'private' // TODO: asi nejake signed url
-                }, function (err, data) {
-                    if (err) {
-                        console.error("ERR S3:", err); // TODO: resit nejak vic
-                    } else {
-                        db.Document.create({
-                            // TODO: url ziskat nejak rozumnejic
-                            key: id,
-                            name: part.filename
-                        }).success(function (document) {
-                            document.setUser(req.user);
-                        });
-                    }
-                });
+                if (part.length + req.user.used_space < req.user.quota) {
+                    s3bucket.putObject({
+                        Key: id,
+                        Body: part,
+                        ACL: 'private'
+                    }, function (err, data) {
+                        if (err) {
+                            console.error("ERR S3:", err); // TODO: resit nejak vic
+                        } else {
+                            db.Document.create({
+                                key: id,
+                                name: part.filename
+                            }).success(function (document) {
+                                document.setUser(req.user);
+                                req.user.used_space += part.length;
+                                req.user.save();
+                            });
+                        }
+                    });
+                } else {
+                    part.resume(); // TODO: tady naznacit, ze jsem nad limitem
+                }
             }
         });
 
