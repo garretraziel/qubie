@@ -1,0 +1,19 @@
+extends base_team
+
+block content
+    h2 Team #{team.name}
+
+    h3 Info
+    p.
+        Currently using #{team.members} out of #{team.members_limit} users and #{team.used_space} out of #{team.quota}
+        space.
+
+    h3 Users
+    if users.length > 0
+        ul
+            each user in users
+                li
+                    p= user.username
+                    span.space_used= user.used_space
+    else
+        p Nutin.

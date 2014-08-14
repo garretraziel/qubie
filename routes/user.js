@@ -26,7 +26,7 @@ module.exports = function (config, db, memstore) {
 
     router.get('/', function (req, res) {
         req.user.getDocuments().success(function (documents) {
-            res.render('user', {documents: documents});
+            res.render('user', {documents: documents, user: req.user});
         });
     });
     router.get('/upload', function (req, res) {

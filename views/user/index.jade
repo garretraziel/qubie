@@ -1,6 +1,11 @@
 extends base_user
 
 block content
+    h3 Info
+    p.
+        Currently using #{user.used_space} out of #{user.quota}.
+
+    h3 Documents
     if documents.length > 0
         ul
             each document in documents

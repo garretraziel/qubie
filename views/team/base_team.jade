@@ -1,0 +1,19 @@
+extends ../base_page
+
+block before_content
+    .submenu-container
+        .wrapper.clearfix
+            nav
+                ul
+                    li: a(href="/team")
+                        span.fa.fa-user.icon
+                        | users
+                    li: a(href="/team/documents")
+                        span.fa.fa-folder.icon
+                        | documents
+                    li: a(href="/team/settings")
+                        span.fa.fa-cogs.icon
+                        | settings
+                    li: a(href="/logout")
+                        span.fa.fa-power-off.icon
+                        | logout
