@@ -40,9 +40,9 @@ socket.on('connect', function () {
     socket.emit('join', {role: 'root', document: ID});
 });
 
-socket.on('auth_presenter', function (name) {
+socket.on('auth_request', function (request) {
     vex.dialog.open({
-        message: "Presenter " + name + " connected. Password:", // TODO: tady hrozi nejaky JavaScript injection
+        message: "Presenter " + request.name + " connected. Password:", // TODO: tady hrozi nejaky JavaScript injection
         input: '<input name="pin" type="password">',
         buttons: [
             $.extend({}, vex.dialog.button.YES, {
@@ -53,9 +53,14 @@ socket.on('auth_presenter', function (name) {
         ],
         callback: function (data) {
             if (data === false) {
-                socket.emit('auth_response', {outcome: false});
+                request.type = "response";
+                request.outcome = "nack";
+                socket.emit('auth_response', request);
             } else {
-                socket.emit('auth_response', {outcome: true, passwd: data.pin});
+                request.type = "response";
+                request.outcome = "ack";
+                request.passwd = data.pin;
+                socket.emit('auth_response', request);
             }
         }
     });

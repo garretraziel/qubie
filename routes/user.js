@@ -104,6 +104,9 @@ module.exports = function (config, db, memstore) {
             });
         });
     });
+    router.get('/:document_id/control', function (req, res) {
+        res.render('user/presenter', {ID: req.params.document_id});
+    });
 
     return router;
 };

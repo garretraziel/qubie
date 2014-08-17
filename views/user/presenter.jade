@@ -1,0 +1,7 @@
+extends ../base
+
+block scripts
+    script.
+        var ID = !{ JSON.stringify(ID) };
+    script(src="/socket.io/socket.io.js")
+    script(src="/javascript/presenter.js")
