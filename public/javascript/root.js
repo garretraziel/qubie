@@ -46,7 +46,6 @@ socket.on('auth_request', function (request) {
         input: '<input name="passwd" type="password">',
         callback: function (data) {
             var response = {};
-            response.type = "response";
             response.name = request.name;
             if (data === false) {
                 response.outcome = "nack";
