@@ -1,7 +1,12 @@
 var socket = io();
 
-socket.emit('join', {role: "presenter", document: ID});
-socket.emit('auth', 'james');
+$(document).ready(function () {
+    $("#sendbtn").on('click', function () {
+        socket.emit('join', {role: "presenter", document: ID});
+        socket.emit('auth', $("#nameinp").val());
+    });
+});
+
 socket.on('auth_response', function (outcome) {
     if (outcome === "ack") {
         console.log("acked");

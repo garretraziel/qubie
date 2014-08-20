@@ -1,5 +1,9 @@
 extends ../base
 
+block body
+    input#nameinp(type="text")
+    button#sendbtn() Send
+
 block scripts
     script.
         var ID = !{ JSON.stringify(ID) };
