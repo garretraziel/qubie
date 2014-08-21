@@ -2,11 +2,6 @@ var socket = io();
 var page;
 
 $(document).ready(function () {
-    $("#sendbtn").on('click', function () {
-        socket.emit('join', {role: "presenter", document: ID});
-        socket.emit('auth', $("#nameinp").val());
-    });
-
     $("#leftbtn").on('click', function () {
         if (page > 0) {
             page--;
@@ -18,18 +13,37 @@ $(document).ready(function () {
         page++;
         socket.emit('page', page);
     });
+
+    vex.dialog.open({
+        message: "Your name:",
+        input: '<input name="name" type="text">',
+        callback: function (data) {
+            if (data !== false) {
+                socket.emit('join', {role: "presenter", document: ID});
+                socket.emit('auth', data.name);
+            }
+        }
+    });
 });
 
 socket.on('auth_response', function (outcome) {
     if (outcome === "ack") {
-        console.log("acked");
-        socket.emit("auth_passwd", "password");
+        vex.dialog.open({
+            message: "Password:",
+            input: '<input name="password" type="password">',
+            callback: function (data) {
+                if (data !== false) {
+                    socket.emit("auth_passwd", data.password);
+                }
+            }
+        });
     } else {
-        console.log("nacked");
+        vex.dialog.alert('Your connection was not authorized by root viewer.')
     }
 });
 socket.on('auth_completed', function () {
-    console.log('OKAY!');
+    $("#leftbtn").removeAttr("disabled");
+    $("#rightbtn").removeAttr("disabled");
 });
 socket.on('page', function (pagenum) {
     page = pagenum;

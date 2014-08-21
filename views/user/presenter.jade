@@ -1,13 +1,18 @@
 extends ../base
 
+append head
+    link(rel="stylesheet", href="/bower_components/vex/css/vex.css")
+    link(rel="stylesheet", href="/bower_components/vex/css/vex-theme-plain.css")
+
 block body
-    input#nameinp(type="text")
-    button#sendbtn Send
-    button#leftbtn Left
-    button#rightbtn Right
+    button#leftbtn(disabled) Left
+    button#rightbtn(disabled) Right
 
 block scripts
     script.
         var ID = !{ JSON.stringify(ID) };
+    script(src="/bower_components/vex/js/vex.combined.min.js")
+    script.
+        vex.defaultOptions.className = 'vex-theme-plain';
     script(src="/socket.io/socket.io.js")
     script(src="/javascript/presenter.js")
