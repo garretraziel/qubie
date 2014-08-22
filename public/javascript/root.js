@@ -78,12 +78,17 @@ $(document).ready(function () {
             if (act_page > 1) {
                 act_page--;
                 socket.emit('page', act_page);
+                if (render_promise) render_promise.cancel();
                 getPage();
             }
         } else if (e.which === 39) {
             act_page++;
             socket.emit('page', act_page);
+            if (render_promise) render_promise.cancel();
             getPage();
         }
+    });
+    $("#chbx_enctrl").change(function () {
+        socket.emit("enable_presenter", $(this).is(':checked'));
     });
 });
