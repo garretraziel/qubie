@@ -9,7 +9,7 @@ var act_page = 1;
 
 var presenter_url;
 
-function rerenderPage() {
+function rerenderPageThen() {
     if (loaded_page) {
         var scale = canvas.height / original_viewport.height;
         var scaledViewport = loaded_page.getViewport(scale);
@@ -21,6 +21,13 @@ function rerenderPage() {
 
         render_promise = loaded_page.render(renderContext);
     }
+}
+
+function rerenderPage() {
+    if (render_promise) {
+        render_promise.cancel();
+    }
+    rerenderPageThen();
 }
 
 function getPage() {
@@ -75,7 +82,6 @@ $(document).ready(function () {
         if (rerender_timeout) window.clearTimeout(rerender_timeout);
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        if (render_promise) render_promise.cancel();
         rerender_timeout = window.setTimeout(function () {
             rerenderPage();
         }, 500); // TODO: tohle resit trochu lip
@@ -85,13 +91,11 @@ $(document).ready(function () {
             if (act_page > 1) {
                 act_page--;
                 socket.emit('page', act_page);
-                if (render_promise) render_promise.cancel();
                 getPage();
             }
         } else if (e.which === 39) {
             act_page++;
             socket.emit('page', act_page);
-            if (render_promise) render_promise.cancel();
             getPage();
         }
     });
