@@ -88,7 +88,13 @@ $(document).ready(function () {
             getPage();
         }
     });
-    $("#chbx_enctrl").change(function () {
+    $("#presenter").change(function () {
         socket.emit("enable_presenter", $(this).is(':checked'));
     });
+    /*$("#cntrls").click(function () {
+        $(this).animate({
+            width: "100px",
+            height: "200px"
+        });
+    });*/
 });

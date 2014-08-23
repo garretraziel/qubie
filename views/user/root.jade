@@ -11,7 +11,10 @@ block title
 block body
     canvas#cnvs(width="300", height="150")
         | Unfortunately, your browser doesn't support HTML5 canvas.
-    input#chbx_enctrl(type="checkbox")
+    div#cntrls
+        .cntrls_logo qb
+        input#presenter.chbx(type="checkbox")
+        label.chbx_label(for="presenter") presenter
 
 block scripts
     script.
