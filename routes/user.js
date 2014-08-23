@@ -15,14 +15,6 @@ module.exports = function (config, db, memstore) {
             res.redirect('/login'); // TODO: flash a navrat zpet
         }
     });
-    router.param('document_id', function (req, res, next, document_id) {
-        var regex = /^\d+$/;
-        if (regex.test(document_id)) {
-            next();
-        } else {
-            next('route');
-        }
-    });
 
     router.get('/', function (req, res) {
         req.user.getDocuments().success(function (documents) {
@@ -77,35 +69,6 @@ module.exports = function (config, db, memstore) {
         });
 
         form.parse(req);
-    });
-    router.get('/:document_id', function (req, res) {
-        db.Document.find(req.params.document_id).success(function (document) {
-            document.getUser().success(function (result) {
-                if (result.id === req.user.id) {
-                    res.render('user/root', {
-                        ID: req.params.document_id,
-                        name: document.name
-                    });
-                } else {
-                    res.redirect('/fail');
-                }
-            });
-        });
-    });
-    router.get('/:document_id/document', function (req, res) {
-        db.Document.find(req.params.document_id).success(function (document) {
-            document.getUser().success(function (result) {
-                if (result.id === req.user.id) {
-                    var params = {Key: document.key};
-                    s3bucket.getObject(params).createReadStream().pipe(res);
-                } else {
-                    res.redirect('/fail');
-                }
-            });
-        });
-    });
-    router.get('/:document_id/control', function (req, res) {
-        res.render('user/presenter', {ID: req.params.document_id});
     });
 
     return router;

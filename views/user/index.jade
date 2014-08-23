@@ -10,7 +10,7 @@ block content
         ul
             each document in documents
                 li.document-item(id=document.id + "_item")
-                    a(href="/user/" + document.id)= document.name
+                    a(href="/document/" + document.id)= document.name
                     span(id=document.id + "_counter")
                     span.fa.fa-trash-o.deleter(document=document.id)
     else
