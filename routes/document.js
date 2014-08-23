@@ -1,6 +1,8 @@
 var express = require('express');
 var AWS = require('aws-sdk');
 
+var memdb = require('../lib/memdb');
+
 module.exports = function (config, db, memstore) {
     var router = express.Router();
     var s3bucket = new AWS.S3({params: {Bucket: config.aws_bucket}});
@@ -40,11 +42,16 @@ module.exports = function (config, db, memstore) {
             });
         });
     });
-    router.get('/:document_id/control', function (req, res) {
-        res.render('document/presenter', {ID: req.params.document_id});
-    });
     router.get('/p/:presenter_id', function (req, res) {
-
+        memdb.getPresenterId(memstore, req.params.presenter_id, function (id) {
+            if (id === false) {
+                res.redirect('/fail');
+            } else {
+                res.render('document/presenter', {
+                    presenter_id: req.params.presenter_id
+                });
+            }
+        });
     });
 
     return router;

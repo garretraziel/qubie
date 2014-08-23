@@ -19,7 +19,7 @@ $(document).ready(function () {
         input: '<input name="name" type="text">',
         callback: function (data) {
             if (data !== false) {
-                socket.emit('join', {role: "presenter", document: ID});
+                socket.emit('join', {role: "presenter", pres_id: pres_id});
                 socket.emit('auth', data.name);
             }
         }

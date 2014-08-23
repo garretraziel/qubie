@@ -51,6 +51,6 @@ var production = {
 
 module.exports = {
     "development": development,
-    "production": production,
-    "heroku": heroku
+    "production": production
+    //"heroku": heroku
 };
