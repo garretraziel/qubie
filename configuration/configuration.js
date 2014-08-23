@@ -1,5 +1,7 @@
 var fs = require('fs');
 var path = require('path');
+var util = require('util');
+var os = require('os');
 
 var development = {
     port: 8080,
@@ -15,11 +17,12 @@ var development = {
     postgres_uri: "postgres://node:node@localhost:5432/node",
     redis_uri: "redis://localhost:6379",
     logging: true,
-    aws_bucket: "qubie"
+    aws_bucket: "qubie",
+    link_url: util.format('https://%s:%d', os.hostname(), 8080)
 };
 
 // heroku
-var heroku = {
+/*var heroku = {
     port: process.env.PORT,
     ssl: false,
     reverse_proxy: true,
@@ -30,7 +33,7 @@ var heroku = {
     redis_uri: process.env.REDISTOGO_URL,
     logging: false,
     aws_bucket: "qubie"
-};
+};*/
 
 var production = {
     port: 5102,
@@ -42,7 +45,8 @@ var production = {
     postgres_uri: process.env.POSTGRES_URL,
     redis_uri: process.env.REDIS_URL,
     logging: false,
-    aws_bucket: "qubie"
+    aws_bucket: "qubie",
+    link_url: util.format('https://%s', "getqubie.com")
 };
 
 module.exports = {

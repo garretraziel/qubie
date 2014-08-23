@@ -43,6 +43,9 @@ module.exports = function (config, db, memstore) {
     router.get('/:document_id/control', function (req, res) {
         res.render('document/presenter', {ID: req.params.document_id});
     });
+    router.get('/p/:presenter_id', function (req, res) {
+
+    });
 
     return router;
 };

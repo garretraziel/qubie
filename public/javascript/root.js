@@ -7,6 +7,8 @@ var loaded_pdf, loaded_page, original_viewport;
 var render_promise, rerender_timeout;
 var act_page = 1;
 
+var presenter_url;
+
 function rerenderPage() {
     if (loaded_page) {
         var scale = canvas.height / original_viewport.height;
@@ -57,6 +59,10 @@ socket.on('auth_request', function (request) {
             }
         }
     });
+});
+
+socket.on('presenter_url', function (url) {
+    presenter_url = url;
 });
 
 $(document).ready(function () {
