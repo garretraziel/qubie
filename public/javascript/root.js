@@ -63,6 +63,7 @@ socket.on('auth_request', function (request) {
 
 socket.on('presenter_url', function (url) {
     presenter_url = url;
+    vex.dialog.alert('Presenter url: ' + url);
 });
 
 $(document).ready(function () {
