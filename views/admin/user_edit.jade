@@ -21,6 +21,9 @@ block content
             p
                 b Quota
                 input(type="text", name="quota", value=user.quota)
+            p
+                b Password
+                input(type="password", name="password")
             input(type="hidden", name="_csrf", value=csrftoken)
             p
                 input(type="submit", value="Save")

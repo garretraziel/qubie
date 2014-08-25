@@ -2,6 +2,7 @@ extends base_admin
 
 block content
     if user
+        p: a(href="/admin/user/" + user.id + "/edit") Edit user
         table
             tr
                 td(align="right"): b Name
