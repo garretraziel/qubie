@@ -48,3 +48,6 @@ socket.on('auth_completed', function () {
 socket.on('page', function (pagenum) {
     page = pagenum;
 });
+socket.on('document_url', function (doc_url) {
+    vex.dialog.alert(doc_url);
+});

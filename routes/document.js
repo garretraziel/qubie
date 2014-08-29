@@ -51,7 +51,7 @@ module.exports = function (config, db, memstore) {
         }
     });
     router.get('/p/:presenter_id', function (req, res) {
-        memdb.getPresenterId(memstore, req.params.presenter_id, function (id) {
+        memdb.getDocumentFromPresenter(memstore, req.params.presenter_id, function (id) {
             if (id === false) {
                 res.redirect('/fail');
             } else {
@@ -61,8 +61,8 @@ module.exports = function (config, db, memstore) {
             }
         });
     });
-    router.get('/d/:presenter_id', function (req, res) {
-        memdb.getPresenterId(memstore, req.params.presenter_id, function (id) {
+    router.get('/d/:pdf_id', function (req, res) {
+        memdb.getDocumentFromPdfId(memstore, req.params.pdf_id, function (id) {
             if (id === false) {
                 res.redirect('/fail');
             } else {
