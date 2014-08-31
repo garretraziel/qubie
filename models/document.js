@@ -3,7 +3,10 @@ module.exports = function (sequelize, DataTypes) {
         name: DataTypes.STRING,
         key: DataTypes.STRING,
         ppt_key: DataTypes.STRING,
-        uploaded_at: DataTypes.DATE
+        uploaded_at: DataTypes.DATE,
+        size: {
+            type: DataTypes.FLOAT
+        }
         //...
     });
 };

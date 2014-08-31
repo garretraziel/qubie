@@ -50,7 +50,8 @@ module.exports = function (config, db, memstore) {
                         } else {
                             db.Document.create({
                                 key: id,
-                                name: part.filename
+                                name: part.filename,
+                                size: part.length
                             }).success(function (document) {
                                 document.setUser(req.user);
                                 req.user.used_space += part.length;
