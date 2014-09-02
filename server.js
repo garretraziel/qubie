@@ -22,7 +22,7 @@ var memstore = memdb.init(config);
 var server;
 
 function runServer() {
-    var sessionStore = new RedisStore({url: config.redis_uri});
+    var sessionStore = new RedisStore({client: memstore});
 
     setup.settings(app, config, db, sessionStore);
     setup.routes(app, config, db, memstore);
