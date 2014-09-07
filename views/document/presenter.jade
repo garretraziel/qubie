@@ -3,14 +3,18 @@ extends ../base
 append head
     link(rel="stylesheet", href="/bower_components/vex/css/vex.css")
     link(rel="stylesheet", href="/bower_components/vex/css/vex-theme-plain.css")
+    link(rel="stylesheet", href="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.3/jquery.mobile.min.css")
 
 block body
     button#leftbtn(disabled) Left
     button#rightbtn(disabled) Right
+    canvas#cnvs(width="300", height="150")
+        | Unfortunately, your browser doesn't support HTML5 canvas.
 
 block scripts
     script.
         var pres_id = !{ JSON.stringify(presenter_id) };
+    script(src="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.3/jquery.mobile.min.js")
     script(src="/bower_components/vex/js/vex.combined.min.js")
     script.
         vex.defaultOptions.className = 'vex-theme-plain';
