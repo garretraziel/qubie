@@ -21,56 +21,57 @@ module.exports = function (config, db, memstore) {
             res.render('user', {documents: documents, user: req.user});
         });
     });
-    router.get('/upload', function (req, res) {
-        res.render('user/upload');
-    });
-    router.post('/upload', function (req, res) {
-        var form = new multiparty.Form(); // TODO: asi nejdriv nejaka bezpecnost
-        // TODO: uklizet soubory
-        // TODO: upload do aws, cteni/zapis do databaze
+    router.route('/upload')
+        .get(function (req, res) {
+            res.render('user/upload');
+        })
+        .post(function (req, res) {
+            var form = new multiparty.Form(); // TODO: asi nejdriv nejaka bezpecnost
+            // TODO: uklizet soubory
+            // TODO: upload do aws, cteni/zapis do databaze
 
-        form.on('part', function (part) {
-            var id = shortId.generate();
+            form.on('part', function (part) {
+                var id = shortId.generate();
 
-            if (part.filename === null) {
-                console.log("Got unhandled field: " + part.name);
-                part.resume();
-            }
-
-            if (part.filename !== null) {
-                part.length = part.byteCount; // TODO: jak je to presne s velikosti?
-                if (part.length + req.user.used_space < req.user.quota) {
-                    s3bucket.putObject({
-                        Key: id,
-                        Body: part,
-                        ACL: 'private'
-                    }, function (err, data) {
-                        if (err) {
-                            console.error("ERR S3:", err); // TODO: resit nejak vic
-                        } else {
-                            db.Document.create({
-                                key: id,
-                                name: part.filename,
-                                size: part.length
-                            }).success(function (document) {
-                                document.setUser(req.user);
-                                req.user.used_space += part.length;
-                                req.user.save();
-                            });
-                        }
-                    });
-                } else {
-                    part.resume(); // TODO: tady naznacit, ze jsem nad limitem
+                if (part.filename === null) {
+                    console.log("Got unhandled field: " + part.name);
+                    part.resume();
                 }
-            }
-        });
 
-        form.on('close', function () {
-            res.redirect('back');
-        });
+                if (part.filename !== null) {
+                    part.length = part.byteCount; // TODO: jak je to presne s velikosti?
+                    if (part.length + req.user.used_space < req.user.quota) {
+                        s3bucket.putObject({
+                            Key: id,
+                            Body: part,
+                            ACL: 'private'
+                        }, function (err, data) {
+                            if (err) {
+                                console.error("ERR S3:", err); // TODO: resit nejak vic
+                            } else {
+                                db.Document.create({
+                                    key: id,
+                                    name: part.filename,
+                                    size: part.length
+                                }).success(function (document) {
+                                    document.setUser(req.user);
+                                    req.user.used_space += part.length;
+                                    req.user.save();
+                                });
+                            }
+                        });
+                    } else {
+                        part.resume(); // TODO: tady naznacit, ze jsem nad limitem
+                    }
+                }
+            });
 
-        form.parse(req);
-    });
+            form.on('close', function () {
+                res.redirect('back');
+            });
+
+            form.parse(req);
+        });
 
     return router;
 };

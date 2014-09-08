@@ -8,39 +8,41 @@ module.exports = function (db, passport) {
     router.get('/', function (req, res) {
         res.render('index');
     });
-    router.get('/login', function (req, res) {
-        res.render('login');
-    });
-    router.post('/login', passport.authenticate('local', {
-        successRedirect: '/user',
-        failureRedirect: '/login'
-        //failureFlash: true // TODO: flash uz neni
-    }));
+    router.route('/login')
+        .get(function (req, res) {
+            res.render('login');
+        })
+        .post(passport.authenticate('local', {
+            successRedirect: '/user',
+            failureRedirect: '/login'
+            //failureFlash: true // TODO: flash uz neni
+        }));
     router.get('/logout', function (req, res) {
         req.logout();
         res.redirect('/');
     });
-    router.get('/register', function (req, res) {
-        res.render('register');
-    });
-    router.post('/register', function (req, res) {
-        secure.hashPassword(req.body.password, function (hash) {
-            db.User.create({
-                username: req.body.username,
-                password: hash,
-                email: req.body.email,
-                premium: false,
-                admin: false,
-                quota: 0, // TODO: quota!
-                used_space: 0
-            }).success(function () {
-                res.redirect('/login'); // TODO: flash!
-            }).failure(function (err) {
-                console.error("ERR during saving user: ", err);
-                res.redirect('/register');
+    router.route('/register')
+        .get(function (req, res) {
+            res.render('register');
+        })
+        .post(function (req, res) {
+            secure.hashPassword(req.body.password, function (hash) {
+                db.User.create({
+                    username: req.body.username,
+                    password: hash,
+                    email: req.body.email,
+                    premium: false,
+                    admin: false,
+                    quota: 0, // TODO: quota!
+                    used_space: 0
+                }).success(function () {
+                    res.redirect('/login'); // TODO: flash!
+                }).failure(function (err) {
+                    console.error("ERR during saving user: ", err);
+                    res.redirect('/register');
+                });
             });
         });
-    });
     router.get('/fail', function (req, res) {
         res.render('fail');
     });
