@@ -1,9 +1,6 @@
 requirejs.config({
     baseUrl: "/javascript/lib",
     shim: {
-        socketio: {
-            exports: 'io'
-        },
         pdfjs: {
             exports: 'PDFJS'
         },
