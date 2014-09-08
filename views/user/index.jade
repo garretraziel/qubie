@@ -1,5 +1,8 @@
 extends base_user
 
+append head
+    script(data-main="/javascript/lister_main", src="/bower_components/requirejs/require.js")
+
 block content
     h3 Info
     p.
@@ -16,6 +19,3 @@ block content
     else
         p Nutin.
 
-block scripts
-    script(src="/socket.io/socket.io.js")
-    script(src="/javascript/lister.js")

@@ -4,6 +4,9 @@ append head
     link(rel="stylesheet", href="/stylesheets/root_view.css")
     link(rel="stylesheet", href="/bower_components/vex/css/vex.css")
     link(rel="stylesheet", href="/bower_components/vex/css/vex-theme-plain.css")
+    script.
+        var ID = !{ JSON.stringify(ID) }; var URL = "/document/" + ID + "/document";
+    script(data-main="/javascript/root_main", src="/bower_components/requirejs/require.js")
 
 block title
     | qb - #{name}
@@ -15,14 +18,3 @@ block body
         .cntrls_logo qb
         input#presenter.chbx(type="checkbox")
         label.chbx_label(for="presenter") presenter
-
-block scripts
-    script.
-        var ID = !{ JSON.stringify(ID) }; var URL = "/document/" + ID + "/document";
-    script(src="/bower_components/pdfjs-bower/dist/compatibility.js")
-    script(src="/bower_components/pdfjs-bower/dist/pdf.js")
-    script(src="/bower_components/vex/js/vex.combined.min.js")
-    script.
-        vex.defaultOptions.className = 'vex-theme-plain';
-    script(src="/socket.io/socket.io.js")
-    script(src="/javascript/root.js")
