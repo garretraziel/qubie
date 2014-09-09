@@ -37,7 +37,7 @@ module.exports = function (db, passport) {
                     used_space: 0
                 }).success(function () {
                     res.redirect('/login'); // TODO: flash!
-                }).failure(function (err) {
+                }).error(function (err) {
                     console.error("ERR during saving user: ", err);
                     res.redirect('/register');
                 });

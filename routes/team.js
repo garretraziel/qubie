@@ -20,14 +20,18 @@ module.exports = function (config, db, memstore) {
     });
 
     router.get('/', function (req, res) {
-        req.user.getAdministredTeam().success(function (team) {
-            if (team === null) {
-                res.render('fail');
-            } else {
-                team.getUsers().success(function (users) {
-                    res.render('team', {users: users, team: team});
-                });
+        var team;
+        req.user.getAdministredTeam().then(function (t) {
+            if (t === null) {
+                throw "Team doesn't exist";
             }
+            team = t;
+            return t.getUsers();
+        }).then(function (users) {
+            res.render('team', {users: users, team: team});
+        }, function (err) {
+            console.error("Error during rendering team with users:", err);
+            res.redirect('/fail');
         });
     });
 

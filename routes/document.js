@@ -18,17 +18,29 @@ module.exports = function (config, db, memstore) {
 
     router.get('/:document_id', function (req, res) {
         if (req.isAuthenticated()) {
-            db.Document.find(req.params.document_id).success(function (document) {
-                document.getUser().success(function (result) {
-                    if (result.id === req.user.id) {
-                        res.render('document/root', {
-                            ID: req.params.document_id,
-                            name: document.name
-                        });
-                    } else {
-                        res.redirect('/fail');
-                    }
-                });
+            var document;
+            db.Document.find(req.params.document_id).then(function (d) {
+                if (d === null) {
+                    throw "Document doesn't exist";
+                }
+                document = d;
+                return d.getUser();
+            }).then(function (result) {
+                if (result === null) {
+                    throw "Document doesn't have owner";
+                }
+
+                if (result.id === req.user.id) {
+                    res.render('document/root', {
+                        ID: req.params.document_id,
+                        name: document.name
+                    });
+                } else {
+                   res.redirect('/fail');
+                }
+            }, function (err) {
+                console.error("Error during reading document:", err);
+                res.redirect('/fail');
             });
         } else {
             res.redirect('/login');
@@ -36,15 +48,27 @@ module.exports = function (config, db, memstore) {
     });
     router.get('/:document_id/document', function (req, res) {
         if (req.isAuthenticated()) {
-            db.Document.find(req.params.document_id).success(function (document) {
-                document.getUser().success(function (result) {
-                    if (result.id === req.user.id) {
-                        var params = {Key: document.key};
-                        s3bucket.getObject(params).createReadStream().pipe(res);
-                    } else {
-                        res.redirect('/fail');
-                    }
-                });
+            var document;
+            db.Document.find(req.params.document_id).then(function (d) {
+                if (d === null) {
+                    throw "Document doesn't exist";
+                }
+                document = d;
+                return d.getUser();
+            }).then(function (result) {
+                if (result === null) {
+                    throw "Document doesn't have owner";
+                }
+
+                if (result.id === req.user.id) {
+                    var params = {Key: document.key};
+                    s3bucket.getObject(params).createReadStream().pipe(res);
+                } else {
+                    res.redirect('/fail');
+                }
+            }, function (err) {
+                console.error("Error during reading document:", err);
+                res.redirect('/fail');
             });
         } else {
             res.redirect('/login');
