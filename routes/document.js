@@ -91,8 +91,13 @@ module.exports = function (config, db, memstore) {
                 res.redirect('/fail');
             } else {
                 db.Document.find(id).success(function (document) {
-                    var params = {Key: document.key};
-                    s3bucket.getObject(params).createReadStream().pipe(res);
+                    if (document === null) {
+                        console.error('Trying to render document that isn`t in database');
+                        res.redirect('/fail');
+                    } else {
+                        var params = {Key: document.key};
+                        s3bucket.getObject(params).createReadStream().pipe(res);
+                    }
                 });
             }
         });
