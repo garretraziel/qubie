@@ -18,7 +18,8 @@ var development = {
     redis_uri: "redis://localhost:6379",
     logging: true,
     aws_bucket: "qubie",
-    link_url: util.format('https://%s:%d', os.hostname(), 8080)
+    link_url: util.format('https://%s:%d', os.hostname(), 8080),
+    default_quota: 1000000
 };
 
 // heroku
@@ -46,7 +47,8 @@ var production = {
     redis_uri: process.env.REDIS_URL,
     logging: false,
     aws_bucket: "qubie",
-    link_url: util.format('https://%s', "getqubie.com")
+    link_url: util.format('https://%s', "getqubie.com"),
+    default_quota: 1000000
 };
 
 module.exports = {
