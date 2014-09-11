@@ -26,30 +26,22 @@ module.exports = function (config, db, passport) {
             res.render('register');
         })
         .post(function (req, res) {
-            if (req.body.username === "" || req.body.email === "") {
-                console.error('Bad registering credentials submitted');
+            if (req.body.username === "" || req.body.email === ""
+                || req.body.password === "") {
+                console.error('Bad register credentials submitted');
                 res.redirect('/register'); // TODO: fail fail
             } else {
-                db.User.find({where: {username: req.body.username}}).success(function (user) {
-                    if (user === null) {
-                        secure.hashPassword(req.body.password, function (hash) {
-                            db.User.create({
-                                username: req.body.username,
-                                password: hash,
-                                email: req.body.email,
-                                premium: false,
-                                admin: false,
-                                quota: config.default_quota, // TODO: quota!
-                                used_space: 0
-                            }).success(function () {
-                                res.redirect('/login'); // TODO: flash!
-                            }).error(function (err) {
-                                console.error("ERR during saving user: ", err);
-                                res.redirect('/register');
-                            });
-                        });
+                secure.createUser(config, db, {
+                    username: req.body.username,
+                    password: req.body.password,
+                    email: req.body.email,
+                    premium: false,
+                    admin: false
+                }, function (err) {
+                    if (err) {
+                        res.redirect('/register');
                     } else {
-                        res.redirect('/register'); // TODO: zprava ze uz je regnutej
+                        res.redirect('/login');
                     }
                 });
             }
