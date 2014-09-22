@@ -1,9 +1,10 @@
 var express = require('express');
-var router = new express.Router();
 
-var secure = require('./secure');
+var secure = require('../lib/secure');
 
-module.exports.init = function (app, config, db) {
+module.exports = function (config, db) {
+    var router = express.Router();
+
     router.use(function (req, res, next) {
         if (req.isAuthenticated()) {
             if (req.user.admin) {
@@ -101,6 +102,6 @@ module.exports.init = function (app, config, db) {
                 }
             });
         });
-};
 
-module.exports.adminRouter = router;
+    return router;
+};
