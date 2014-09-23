@@ -1,0 +1,12 @@
+[Service]
+ExecStart=/usr/bin/node /home/qubie/qb/server.js
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=qubie
+User=qubie
+Group=qubie
+EnvironmentFile=-/etc/sysconfig/qubie
+
+[Install]
+WantedBy=multi-user.target
