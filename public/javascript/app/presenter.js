@@ -26,11 +26,14 @@ define(function (require) {
             input: '<input name="name" type="text">',
             callback: function (data) {
                 if (data !== false) {
-                    socket.emit('join', {role: "presenter", pres_id: pres_id});
                     socket.emit('auth', data.name);
                 }
             }
         });
+    });
+
+    socket.on('connect', function () {
+        socket.emit('join', {role: "presenter", pres_id: pres_id});
     });
 
     socket.on('auth_response', function (outcome) {
