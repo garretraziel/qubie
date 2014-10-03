@@ -34,7 +34,7 @@ module.exports = function (config, db) {
                 res.render('admin/users', {users: users});
             });
         } else if (req.query.search_email) {
-            db.User.find({where: {email: req.query.search_email}}).success(function (users) {
+            db.User.findAll({where: {email: req.query.search_email}}).success(function (users) {
                 res.render('admin/users', {users: users});
             });
         } else {

@@ -48,7 +48,7 @@ define(function (require) {
                 }
             });
         } else {
-            vexdialog.alert('Your connection was not authorized by root viewer.')
+            vexdialog.alert('Your connection was not authorized by root viewer.');
         }
     });
     socket.on('auth_completed', function () {
