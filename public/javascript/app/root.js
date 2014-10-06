@@ -89,7 +89,9 @@ define(function (require) {
             getPage();
         });
         $(window).resize(function () {
-            if (rerender_timeout) window.clearTimeout(rerender_timeout);
+            if (rerender_timeout) {
+                window.clearTimeout(rerender_timeout);
+            }
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             rerender_timeout = window.setTimeout(function () {
