@@ -12,8 +12,8 @@ requirejs.config({
         socketio: "/socket.io/socket.io",
         vex: "/bower_components/vex/js/vex.min",
         vexdialog: "/bower_components/vex/js/vex.dialog.min",
-        pdfjs: "/bower_components/pdfjs-bower/dist/pdf",
-        pdfjs_compat: "/bower_components/pdfjs-bower/dist/compatibility",
+        pdfjs: "/bower_components/pdfjs-dist/build/pdf",
+        pdfjs_compat: "/bower_components/pdfjs-dist/web/compatibility",
         app: "../app"
     }
 });

@@ -4,7 +4,7 @@ define(function (require) {
     var vex = require('vex');
     var vexdialog = require('vexdialog');
     var PDFJS = require('pdfjs'); require('pdfjs_compat');
-    PDFJS.workerSrc = '/bower_components/pdfjs-bower/dist/pdf.worker.js';
+    PDFJS.workerSrc = '/bower_components/pdfjs-dist/build/pdf.worker.js';
 
     var socket = io();
     var canvas = document.getElementById('cnvs');

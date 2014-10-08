@@ -18,8 +18,8 @@
     "tests"
   ],
   "dependencies": {
-    "pdfjs-bower": "~1.0.233",
     "vex": "~2.2.1",
-    "requirejs": "~2.1.14"
+    "requirejs": "~2.1.14",
+    "pdfjs-dist": "~1.0.892"
   }
 }
