@@ -19,7 +19,8 @@ var development = {
     logging: true,
     aws_bucket: "qubie",
     link_url: util.format('https://%s:%d', os.hostname(), 8080),
-    default_quota: 1000000
+    default_quota: 1000000,
+    send_mails: false
 };
 
 // heroku
@@ -47,8 +48,19 @@ var production = {
     redis_uri: process.env.REDIS_URL,
     logging: false,
     aws_bucket: "qubie",
-    link_url: util.format('https://%s', "getqubie.com"),
-    default_quota: 1000000
+    link_url: util.format('https://www.%s', "getqubie.com"),
+    default_quota: 1000000,
+    send_mails: true,
+    mail_config: {
+        host: process.env.MAIL_HOST,
+        port: process.env.MAIL_PORT,
+        secure: true,
+        ignoreTLS: false,
+        auth: {
+            user: process.env.MAIL_USER,
+            pass: process.env.MAIL_PASS
+        }
+    }
 };
 
 module.exports = {
