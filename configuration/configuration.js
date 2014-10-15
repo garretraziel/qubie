@@ -55,7 +55,6 @@ var production = {
         host: process.env.MAIL_HOST,
         port: process.env.MAIL_PORT,
         secure: true,
-        ignoreTLS: false,
         auth: {
             user: process.env.MAIL_USER,
             pass: process.env.MAIL_PASS
