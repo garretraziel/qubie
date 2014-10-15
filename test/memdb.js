@@ -35,7 +35,7 @@ describe('memdb', function () {
         return done(new Error("Cannot get values from redis"));
     };
 
-    describe('#init', function () {
+    describe.skip('#init', function () {
         it('should connect to redis providing redis url', function () {
             var redisClient = memdb.init(config);
 
