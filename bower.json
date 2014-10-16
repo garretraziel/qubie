@@ -8,7 +8,6 @@
   "moduleType": [
     "node"
   ],
-  "license": "MIT",
   "private": true,
   "ignore": [
     "**/.*",
