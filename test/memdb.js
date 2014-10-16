@@ -7,6 +7,7 @@ describe('memdb', function () {
     var config = {redis_uri: "redis://localhost:6379"};
     var passConfig = {redis_uri: "redis://localhost:password:6379"};
     var id = 1;
+    var id_not_online = 2;
     var nonexistent_id = 246;
     var memstore_id = "document:" + id;
     var memstore_online_id = "document:" + id + ":online";
@@ -31,7 +32,16 @@ describe('memdb', function () {
     memstore.decr = function (id, done) {
         done(null, this[id] - 1);
     };
+    memstore.get = function (id, done) {
+        if (this[id]) {
+            return done(null, this[id]);
+        }
+        return done(null, null);
+    };
     memstore_fail.hget = function (id, key, done) {
+        return done(new Error("Cannot get values from redis"));
+    };
+    memstore_fail.get = function (id, done) {
         return done(new Error("Cannot get values from redis"));
     };
 
@@ -92,6 +102,29 @@ describe('memdb', function () {
         it('should decrease online count', function (done) {
             memdb.decrOnline(memstore, id, function (obtained_count) {
                 assert(obtained_count === online_count - 1);
+                done();
+            });
+        });
+    });
+
+    describe("#getOnline", function () {
+        it('should return online count for given document and page', function (done) {
+            memdb.getOnline(memstore, id, function (obtained_count) {
+                assert(obtained_count === online_count);
+                done();
+            });
+        });
+
+        it('should return 0 when there is no online count for document and page', function (done) {
+            memdb.getOnline(memstore, id_not_online, function (obtained_count) {
+                assert(obtained_count === 0);
+                done();
+            });
+        });
+
+        it('should return 0 when there is an error in redis connection', function (done) {
+            memdb.getOnline(memstore_fail, id, function (obtained_count) {
+                assert(obtained_count === 0);
                 done();
             });
         });
