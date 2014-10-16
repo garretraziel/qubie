@@ -3,48 +3,48 @@ var redis = require('redis');
 
 var memdb = require('../lib/memdb');
 
-describe('memdb', function () {
-    var config = {redis_uri: "redis://localhost:6379"};
-    var passConfig = {redis_uri: "redis://localhost:password:6379"};
-    var id = 1;
-    var id_not_online = 2;
-    var nonexistent_id = 246;
-    var memstore_id = "document:" + id;
-    var memstore_online_id = "document:" + id + ":online";
-    var nonexistent_mem_id = "document:" + nonexistent_id;
-    var page = 17;
-    var default_page = 15;
-    var online_count = 13;
-    var memstore = {};
-    var memstore_fail = {};
-    memstore[memstore_id] = {"page": page.toString()};
-    memstore[memstore_online_id] = online_count;
-    memstore[nonexistent_mem_id] = {"page": null};
-    memstore.hget = function (id, key, done) {
-        return done(null, this[id][key]);
-    };
-    memstore.hset = function (id, key, value) {
-        assert(value === default_page);
-    };
-    memstore.incr = function (id, done) {
-        done(null, this[id] + 1);
-    };
-    memstore.decr = function (id, done) {
-        done(null, this[id] - 1);
-    };
-    memstore.get = function (id, done) {
-        if (this[id]) {
-            return done(null, this[id]);
-        }
-        return done(null, null);
-    };
-    memstore_fail.hget = function (id, key, done) {
-        return done(new Error("Cannot get values from redis"));
-    };
-    memstore_fail.get = function (id, done) {
-        return done(new Error("Cannot get values from redis"));
-    };
+var config = {redis_uri: "redis://localhost:6379"};
+var passConfig = {redis_uri: "redis://localhost:password:6379"};
+var id = 1;
+var id_not_online = 2;
+var nonexistent_id = 246;
+var memstore_id = "document:" + id;
+var memstore_online_id = "document:" + id + ":online";
+var nonexistent_mem_id = "document:" + nonexistent_id;
+var page = 17;
+var default_page = 15;
+var online_count = 13;
+var memstore = {};
+var memstore_fail = {};
+memstore[memstore_id] = {"page": page.toString()};
+memstore[memstore_online_id] = online_count;
+memstore[nonexistent_mem_id] = {"page": null};
+memstore.hget = function (id, key, done) {
+    return done(null, this[id][key]);
+};
+memstore.hset = function (id, key, value) {
+    assert(value === default_page);
+};
+memstore.incr = function (id, done) {
+    done(null, this[id] + 1);
+};
+memstore.decr = function (id, done) {
+    done(null, this[id] - 1);
+};
+memstore.get = function (id, done) {
+    if (this[id]) {
+        return done(null, this[id]);
+    }
+    return done(null, null);
+};
+memstore_fail.hget = function (id, key, done) {
+    return done(new Error("Cannot get values from redis"));
+};
+memstore_fail.get = function (id, done) {
+    return done(new Error("Cannot get values from redis"));
+};
 
+describe('memdb', function () {
     describe.skip('#init', function () {
         it('should connect to redis providing redis url', function () {
             var redisClient = memdb.init(config);
