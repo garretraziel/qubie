@@ -137,6 +137,7 @@ body {
     font-weight: bold;
 
     font-family: 'Source Sans Pro', sans-serif;
+    white-space: nowrap; /* TODO: tohle udelat trochu lip */
     /*background: #801b15;*/
 }
 

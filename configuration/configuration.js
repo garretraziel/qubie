@@ -20,7 +20,8 @@ var development = {
     aws_bucket: "qubie",
     link_url: util.format('https://%s:%d', os.hostname(), 8080),
     default_quota: 1000000,
-    send_mails: false
+    send_mails: false,
+    log_file: path.join(__dirname, "../access.log")
 };
 
 // heroku
@@ -59,7 +60,8 @@ var production = {
             user: process.env.MAIL_USER,
             pass: process.env.MAIL_PASS
         }
-    }
+    },
+    log_file: "/var/log/qubie/access.log"
 };
 
 module.exports = {
