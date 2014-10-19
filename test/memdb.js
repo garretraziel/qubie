@@ -62,6 +62,9 @@ describe('memdb', function () {
     memstore_fail.get = function (id, done) {
         return done(new Error('Cannot get values from redis'));
     };
+    memstore_fail.incr = memstore_fail.decr = function (id, done) {
+        return done(new Error('Cannot get values from redis'));
+    };
 
     describe.skip('#init', function () {
         it('should connect to redis providing redis url', function () {
@@ -118,12 +121,26 @@ describe('memdb', function () {
                 done();
             });
         });
+
+        it('should return 0 when there was error during reading from db', function (done) {
+            memdb.incrOnline(memstore_fail, id, function (obtained_count) {
+                assert.equal(obtained_count, 0);
+                done();
+            });
+        });
     });
 
     describe('#decrOnline', function () {
         it('should decrease online count', function (done) {
             memdb.decrOnline(memstore, id, function (obtained_count) {
                 assert.equal(obtained_count, online_count - 1);
+                done();
+            });
+        });
+
+        it('should return 0 when there was error during reading from db', function (done) {
+            memdb.decrOnline(memstore_fail, id, function (obtained_count) {
+                assert.equal(obtained_count, 0);
                 done();
             });
         });
