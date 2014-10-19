@@ -21,8 +21,8 @@ var development = {
     link_url: util.format('https://%s:%d', os.hostname(), 8080),
     default_quota: 1000000,
     send_mails: false,
-    access_log_file: path.join(__dirname, "../access.log"),
-    system_log_file: path.join(__dirname, "../system.log")
+    log_access: false,
+    file_log_output: false
 };
 
 // heroku
@@ -62,7 +62,9 @@ var production = {
             pass: process.env.MAIL_PASS
         }
     },
+    log_access: true,
     access_log_file: "/var/log/qubie/access.log",
+    file_log_output: true,
     system_log_file: "/var/log/qubie/system.log"
 };
 
