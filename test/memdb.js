@@ -1,13 +1,8 @@
 var assert = require('assert');
 var async = require('async');
 var redis = require('redis');
-var winston = require('winston');
 
 var memdb = require('../lib/memdb');
-
-before(function () {
-    winston.remove(winston.transports.Console);
-});
 
 describe('memdb', function () {
     var config = {redis_uri: 'redis://localhost:6379'};
