@@ -93,6 +93,7 @@ describe('secure', function () {
         it('should hash password and then call "next"', function (done) {
             secure.hashPassword("password", function (err, obtained_hash) {
                 bcrypt.compare("password", obtained_hash, function (err, res) {
+                    assert.equal(err, null);
                     assert.equal(res, true);
                     done();
                 });
@@ -106,6 +107,7 @@ describe('secure', function () {
                 var db = createDummyDb("user", hashed_password, false, false);
                 var strategy = secure.createLocalStrategyVerify(db);
                 strategy("user", "password", function (err, result) {
+                    assert.equal(err, null);
                     assert.deepEqual(result, {id: user_id, name: "user", password: hashed_password});
                     done();
                 });
@@ -117,6 +119,7 @@ describe('secure', function () {
                 var db = createDummyDb("user", hashed_password, false, false);
                 var strategy = secure.createLocalStrategyVerify(db);
                 strategy("user", "bad_password", function (err, result) {
+                    assert.equal(err, null);
                     assert.equal(result, false);
                     done();
                 });
@@ -127,6 +130,7 @@ describe('secure', function () {
             var db = createDummyDb(null, null, true, false);
             var strategy = secure.createLocalStrategyVerify(db);
             strategy("user", "password", function (err, result) {
+                assert.equal(err, null);
                 assert.equal(result, false);
                 done();
             });
@@ -150,10 +154,41 @@ describe('secure', function () {
                 var serialize = secure.createSerializeUser(db);
                 strategy("user", "password", function (err, user) {
                     serialize(user, function (err, result) {
+                        assert.equal(err, null);
                         assert.equal(result, user_id);
                         done();
                     });
                 });
+            });
+        });
+    });
+
+    describe('#createDeserializeUser', function () {
+        it('should return user object from database', function (done) {
+            var db = createDummyDb("user", "password", false, false);
+            var deserialize = secure.createDeserializeUser(db);
+            deserialize(user_id, function (err, user) {
+                assert.equal(err, null);
+                assert.deepEqual(user, {id: user_id, name: "user", password: "password"});
+                done();
+            });
+        });
+
+        it('should return error when user was not found', function (done) {
+            var db = createDummyDb(null, null, true, false);
+            var deserialize = secure.createDeserializeUser(db);
+            deserialize(user_id, function (err, user) {
+                assert(err instanceof Error);
+                done();
+            });
+        });
+
+        it('should return error when there was error during reading from db', function (done) {
+            var db = createDummyDb(null, null, false, true);
+            var deserialize = secure.createDeserializeUser(db);
+            deserialize(user_id, function (err, user) {
+                assert(err instanceof Error);
+                done();
             });
         });
     });
