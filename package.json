@@ -3,8 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "description": "Web app for controlling presentations using smartphones and tablets",
+  "author": "Jan Sedlák <boloomka@gmail.com>",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "mocha test"
   },
   "dependencies": {
     "async": "^0.9.0",
