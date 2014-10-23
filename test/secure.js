@@ -7,27 +7,41 @@ var secure = require('../lib/secure');
 describe('secure', function () {
     var user_id = 123;
     function createDummyDb(inserted_object, errs) {
-        var update_function = function (updated, what) {
+        var existing_object = {};
+        var created_object = {};
+        for (var key in inserted_object) {
+            if (inserted_object.hasOwnProperty(key)) {
+                existing_object[key] = inserted_object[key];
+            }
+        }
+        existing_object.updateAttributes = function (updated, what) {
             var len = what.length;
             for (var i = 0; i < len; i++) {
-                this[what[i]] = updated[what[i]];
+                existing_object[what[i]] = updated[what[i]];
             }
-            return this;
+            return {
+                success: function (done) {
+                    if (!errs.iserror_update) {
+                        done();
+                    }
+                    return {
+                        error: function (done) {
+                            if (errs.iserror_update) {
+                                done(new Error('Error during updating values in db'));
+                            }
+                        }
+                    };
+                }
+            };
         };
         var find_function = function () {
             return {
-                updateAttributes: update_function,
-                success: function (done) {
+                success: function(done) {
                     if (!errs.iserror_find) {
                         if (errs.isnull) {
                             done(null);
                         } else {
-                            for (var key in inserted_object) {
-                                if (inserted_object.hasOwnProperty(key)) {
-                                    this[key] = inserted_object[key];
-                                }
-                            }
-                            done(this);
+                            done(existing_object);
                         }
                     }
                     return {
@@ -44,7 +58,7 @@ describe('secure', function () {
             if (!errs.iserror_create) {
                 for (var key in options) {
                     if (options.hasOwnProperty(key)) {
-                        this[key] = options[key];
+                        created_object[key] = options[key];
                     }
                 }
             }
@@ -59,23 +73,29 @@ describe('secure', function () {
                                 done(new Error('Error during writing to db'));
                             }
                         }
-                    }
+                    };
                 }
             };
         };
-        var user_object = {
-            find: find_function,
-            create: create_function
-        };
         return {
-            User: user_object
+            User: {
+                find: find_function,
+                create: create_function,
+                created: created_object,
+                existing: existing_object
+            }
         };
     }
     var createUser = function (password) {
         return {
             id: user_id,
             username: "user",
-            password: password
+            password: password,
+            email: "user@example.com",
+            premium: true,
+            admin: false,
+            quota: 1234,
+            used_space: 0
         };
     };
 
@@ -151,7 +171,7 @@ describe('secure', function () {
                 var db = createDummyDb(user, {});
                 var strategy = secure.createLocalStrategyVerify(db);
                 strategy("user", "password", function (err, result) {
-                    assert.equal(err, null);                    
+                    assert.equal(err, null);
                     assert.equal(result.id, user.id);
                     assert.equal(result.username, user.username);
                     assert.equal(result.password, user.password);
@@ -257,13 +277,13 @@ describe('secure', function () {
             };
             secure.createUser({default_quota: 4321}, db, args, function (err) {
                 assert.equal(err, null);
-                assert.equal(db.User.username, "user");
-                assert.equal(db.User.email, "user@example.com");
-                assert.equal(db.User.premium, false);
-                assert.equal(db.User.admin, true);
-                assert.equal(db.User.quota, 1234);
-                assert.equal(db.User.used_space, 0);
-                bcrypt.compare("password", db.User.password, function (err, result) {
+                assert.equal(db.User.created.username, "user");
+                assert.equal(db.User.created.email, "user@example.com");
+                assert.equal(db.User.created.premium, false);
+                assert.equal(db.User.created.admin, true);
+                assert.equal(db.User.created.quota, 1234);
+                assert.equal(db.User.created.used_space, 0);
+                bcrypt.compare("password", db.User.created.password, function (err, result) {
                     assert.equal(result, true);
                     done();
                 });
@@ -281,11 +301,11 @@ describe('secure', function () {
             };
             secure.createUser({default_quota: 4321}, db, args, function (err) {
                 assert.equal(err, null);
-                assert.equal(db.User.username, "user");
-                assert.equal(db.User.email, null);
-                assert.equal(db.User.premium, false);
-                assert.equal(db.User.admin, true);
-                assert.equal(db.User.quota, 4321);
+                assert.equal(db.User.created.username, "user");
+                assert.equal(db.User.created.email, null);
+                assert.equal(db.User.created.premium, false);
+                assert.equal(db.User.created.admin, true);
+                assert.equal(db.User.created.quota, 4321);
                 done();
             });
         });
@@ -369,17 +389,9 @@ describe('secure', function () {
 
     describe('#changeUser', function () {
         it('should change user attributes', function (done) {
-            var user = {
-                username: "user",
-                password: "password",
-                email: "user@example.com",
-                premium: true,
-                admin: false,
-                quota: 1234,
-                used_space: 0
-            };
-            var db = createDummyDb(user, {});
+            var db = createDummyDb(createUser("password"), {});
             secure.changeUser(db, {
+                username: "user", //TODO: tohle oddelat, ale nejprve spravit v kodu
                 database_id: user_id,
                 password: "",
                 premium: undefined,
@@ -387,13 +399,112 @@ describe('secure', function () {
                 quota: 4321
             }, function (err) {
                 assert.equal(err, null);
-                assert.equal(db.User.username, "user");
-                assert.equal(db.User.password, "password");
-                assert.equal(db.User.email, "user@user.com");
-                assert.equal(db.User.premium, false);
-                assert.equal(db.User.admin, false);
-                assert.equal(db.User.quota, 4321);
-                assert.equal(db.User.used_space, 0);
+                assert.equal(db.User.existing.username, "user");
+                assert.equal(db.User.existing.password, "password");
+                assert.equal(db.User.existing.email, "user@user.com");
+                assert.equal(db.User.existing.premium, false);
+                assert.equal(db.User.existing.admin, false);
+                assert.equal(db.User.existing.quota, 4321);
+                assert.equal(db.User.existing.used_space, 0);
+                done();
+            });
+        });
+
+        it('should change user password', function (done) {
+            var db = createDummyDb(createUser("password"), {});
+            secure.changeUser(db, {
+                database_id: user_id,
+                password: "new_password",
+            }, function (err) {
+                bcrypt.compare("new_password", db.User.existing.password, function (err, result) {
+                    assert.equal(result, true);
+                    done();
+                });
+            });
+        });
+
+        it('should return error when there was error during updating attributes', function (done) {
+            async.parallel([
+                function (callback) {
+                    var user = createUser("password");
+                    var db = createDummyDb(user, {iserror_update: true});
+                    secure.changeUser(db, {
+                        database_id: user_id,
+                        email: "user@user.com"
+                    }, function (err) {
+                        assert(err instanceof Error);
+                        callback();
+                    });
+                },
+                function (callback) {
+                    var user = createUser("password");
+                    var db = createDummyDb(user, {iserror_update: true});
+                    secure.changeUser(db, {
+                        database_id: user_id,
+                        email: "user@user.com",
+                        password: "new_password"
+                    }, function (err) {
+                        assert(err instanceof Error);
+                        callback();
+                    });
+                }
+            ], function () {
+                done();
+            });
+        });
+
+        it('should return error when user account was not found', function (done) {
+            var db = createDummyDb({}, {isnull: true});
+            secure.changeUser(db, {
+                database_id: user_id,
+                email: "user@user.com"
+            }, function (err) {
+                assert(err instanceof Error);
+                done();
+            });
+        });
+
+        it('should return error when no database_id was provided', function (done) {
+            var db = createDummyDb(createUser("password"), {});
+            secure.changeUser(db, {
+                email: "user@user.com"
+            }, function (err) {
+                assert(err instanceof Error);
+                done();
+            });
+        });
+
+        it('should return error when there was error during searching in db', function (done) {
+            var db = createDummyDb(createUser("password"), {isfind_error: true});
+            secure.changeUser(db, {
+                database_id: user_id,
+                email: "user@user.com"
+            }, function (err) {
+                assert(err instanceof Error);
+                done();
+            });
+        });
+    });
+
+    describe('#authenticated', function () {
+        it('should add info about authenticated user to locals', function (done) {
+            var req = {};
+            req.isAuthenticated = function () {return true;};
+            req.user = {username: 'user'};
+            var res = {locals: {}};
+            secure.authenticated(req, res, function () {
+                assert.equal(res.locals.username, 'user');
+                assert.equal(res.locals.logged_in, true);
+                done();
+            });
+        });
+
+        it('should set logged_in to false when user is not logged in', function (done) {
+            var req = {};
+            req.isAuthenticated = function () {return false;};
+            var res = {locals: {}};
+            secure.authenticated(req, res, function () {
+                assert.equal(res.locals.logged_in, false);
                 done();
             });
         });
