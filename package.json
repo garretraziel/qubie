@@ -6,7 +6,7 @@
   "author": "Jan Sedlák <boloomka@gmail.com>",
   "scripts": {
     "start": "node server.js",
-    "test": "mocha test"
+    "test": "./node_modules/mocha/bin/mocha test"
   },
   "dependencies": {
     "async": "^0.9.0",
