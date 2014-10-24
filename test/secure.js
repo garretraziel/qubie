@@ -1,4 +1,5 @@
 var assert = require('assert');
+var EventEmitter = require('events').EventEmitter;
 var async = require('async');
 var bcrypt = require('bcrypt');
 
@@ -507,6 +508,48 @@ describe('secure', function () {
                 assert.equal(res.locals.logged_in, false);
                 done();
             });
+        });
+    });
+
+    describe('#bindPAuthRoot', function () {
+        it('should handle websocket root authentication and call done() when done', function (done) {
+            var socket = new EventEmitter();
+            var authEmitter = new EventEmitter();
+            var controlEmitter = new EventEmitter();
+            var original_request = {name: "user"};
+            var original_response = {outcome: "ack", name: "user", passwd: "password"};
+            socket.on('auth_request', function (request) {
+                assert.deepEqual(original_request, request);
+                socket.emit('auth_response', original_response);
+            });
+            authEmitter.on('response:user', function (response) {
+                assert.equal(response.outcome, "ack");
+                assert.equal(response.passwd, original_response.passwd);
+                controlEmitter.emit("authorized");
+            });
+            secure.bindPAuthRoot(socket, authEmitter, controlEmitter, null, done);
+            authEmitter.emit('request', original_request);
+        });
+
+        it('should not call done() when user was not authenticated', function (done) {
+            var socket = new EventEmitter();
+            var authEmitter = new EventEmitter();
+            var controlEmitter = new EventEmitter();
+            var original_request = {name: "user"};
+            var original_response = {outcome: "ack", name: "user", passwd: "password"};
+            socket.on('auth_request', function (request) {
+                assert.deepEqual(original_request, request);
+                socket.emit('auth_response', original_response);
+            });
+            authEmitter.on('response:user', function (response) {
+                assert.equal(response.outcome, "ack");
+                assert.equal(response.passwd, original_response.passwd);
+                done();
+            });
+            secure.bindPAuthRoot(socket, authEmitter, controlEmitter, null, function () {
+                throw new Error("This function should not be called");
+            });
+            authEmitter.emit('request', original_request);
         });
     });
 });
