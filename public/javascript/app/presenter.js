@@ -51,6 +51,17 @@ define(function (require) {
             vexdialog.alert('Your connection was not authorized by root viewer.');
         }
     });
+    socket.on('bad_password', function () {
+        vexdialog.open({
+            message: "Bad password. Password:",
+            input: '<input name="password" type="password">',
+            callback: function (data) {
+                if (data !== false) {
+                    socket.emit("auth_passwd", data.password);
+                }
+            }
+        });
+    });
     socket.on('auth_completed', function () {
         $("#leftbtn").removeAttr("disabled");
         $("#rightbtn").removeAttr("disabled");

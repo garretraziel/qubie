@@ -552,4 +552,102 @@ describe('secure', function () {
             authEmitter.emit('request', original_request);
         });
     });
+
+    describe('#bindPAuth', function () {
+        it('should authenticate presenter and call done() when done', function (done) {
+            var socket = new EventEmitter();
+            var authEmitter = new EventEmitter();
+            var controlEmitter = new EventEmitter();
+            var authMessage = {outcome: "ack", passwd: "passwd"};
+            var username = 'user';
+            authEmitter.on('request', function (request) {
+                assert.equal(request.name, username);
+                authEmitter.emit('response:' + request.name, authMessage);
+            });
+            socket.on('auth_response', function (state) {
+                assert.equal(state, "ack");
+                socket.emit('auth_passwd', authMessage.passwd);
+            });
+            async.parallel([
+                function (callback) {
+                    socket.on('auth_completed', callback);
+                },
+                function (callback) {
+                    controlEmitter.on('authorized', callback);
+                },
+                function (callback) {
+                    secure.bindPAuth(socket, authEmitter, controlEmitter, null, callback);
+                }
+            ], function () {
+                done();
+            });
+            socket.emit('auth', username);
+        });
+
+        it('should not call done() when presenter was rejected', function (done) {
+            var socket = new EventEmitter();
+            var authEmitter = new EventEmitter();
+            var controlEmitter = new EventEmitter();
+            var authMessage = {outcome: "nack"};
+            var username = 'user';
+            authEmitter.on('request', function (request) {
+                assert.equal(request.name, username);
+                authEmitter.emit('response:' + request.name, authMessage);
+            });
+            socket.on('auth_response', function (state) {
+                assert.equal(state, "nack");
+                done();
+            });
+            socket.on('auth_completed', function () {
+                throw new Error("This function should not be called");
+            });
+            controlEmitter.on('authorized', function () {
+                throw new Error("This function should not be called");
+            });
+            secure.bindPAuth(socket, authEmitter, controlEmitter, null, function () {
+                throw new Error("This function should not be called");
+            });
+            socket.emit('auth', username);
+        });
+
+        it('should ask for password repeatedly when provided password was wrong', function (done) {
+            var socket = new EventEmitter();
+            var authEmitter = new EventEmitter();
+            var controlEmitter = new EventEmitter();
+            var authMessage = {outcome: "ack", passwd: "passwd"};
+            var username = 'user';
+            var retries = 0;
+            var max_retries = 5;
+            authEmitter.on('request', function (request) {
+                assert.equal(request.name, username);
+                authEmitter.emit('response:' + request.name, authMessage);
+            });
+            socket.on('auth_response', function (state) {
+                assert.equal(state, "ack");
+                socket.emit('auth_passwd', "badpassword");
+            });
+            socket.on('bad_password', function () {
+                retries += 1;
+                if (retries >= max_retries) {
+                    socket.emit('auth_passwd', authMessage.passwd);
+                } else {
+                    socket.emit('auth_passwd', "badpassword");
+                }
+            });
+            async.parallel([
+                function (callback) {
+                    socket.on('auth_completed', callback);
+                },
+                function (callback) {
+                    controlEmitter.on('authorized', callback);
+                },
+                function (callback) {
+                    secure.bindPAuth(socket, authEmitter, controlEmitter, null, callback);
+                }
+            ], function () {
+                done();
+            });
+            socket.emit('auth', username);
+        });
+    });
 });
