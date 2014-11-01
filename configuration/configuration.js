@@ -25,20 +25,6 @@ var development = {
     file_log_output: false
 };
 
-// heroku
-/*var heroku = {
-    port: process.env.PORT,
-    ssl: false,
-    reverse_proxy: true,
-    secret: process.env.SECRET_TOKEN,
-    public: path.join(__dirname, "../public"),
-    views: path.join(__dirname, "../views"),
-    postgres_uri: process.env.HEROKU_POSTGRESQL_ROSE_URL,
-    redis_uri: process.env.REDISTOGO_URL,
-    logging: false,
-    aws_bucket: "qubie"
-};*/
-
 var production = {
     port: 5102,
     ssl: false,
@@ -71,5 +57,4 @@ var production = {
 module.exports = {
     "development": development,
     "production": production
-    //"heroku": heroku
 };

@@ -2,91 +2,13 @@ var assert = require('assert');
 var EventEmitter = require('events').EventEmitter;
 var async = require('async');
 var bcrypt = require('bcrypt');
+var createDummyDb = require('./utils/db');
 
 var secure = require('../lib/secure');
 
 describe('secure', function () {
     var user_id = 123;
-    function createDummyDb(inserted_object, errs) {
-        var existing_object = {};
-        var created_object = {};
-        for (var key in inserted_object) {
-            if (inserted_object.hasOwnProperty(key)) {
-                existing_object[key] = inserted_object[key];
-            }
-        }
-        existing_object.updateAttributes = function (updated, what) {
-            var len = what.length;
-            for (var i = 0; i < len; i++) {
-                existing_object[what[i]] = updated[what[i]];
-            }
-            return {
-                success: function (done) {
-                    if (!errs.iserror_update) {
-                        done();
-                    }
-                    return {
-                        error: function (done) {
-                            if (errs.iserror_update) {
-                                done(new Error('Error during updating values in db'));
-                            }
-                        }
-                    };
-                }
-            };
-        };
-        var find_function = function () {
-            return {
-                success: function(done) {
-                    if (!errs.iserror_find) {
-                        if (errs.isnull) {
-                            done(null);
-                        } else {
-                            done(existing_object);
-                        }
-                    }
-                    return {
-                        error: function (done) {
-                            if (errs.iserror_find) {
-                                done(new Error('Error during reading from db'));
-                            }
-                        }
-                    };
-                }
-            };
-        };
-        var create_function = function (options) {
-            if (!errs.iserror_create) {
-                for (var key in options) {
-                    if (options.hasOwnProperty(key)) {
-                        created_object[key] = options[key];
-                    }
-                }
-            }
-            return {
-                success: function (done) {
-                    if (!errs.iserror_create) {
-                        done();
-                    }
-                    return {
-                        error: function (done) {
-                            if (errs.iserror_create) {
-                                done(new Error('Error during writing to db'));
-                            }
-                        }
-                    };
-                }
-            };
-        };
-        return {
-            User: {
-                find: find_function,
-                create: create_function,
-                created: created_object,
-                existing: existing_object
-            }
-        };
-    }
+
     var createUser = function (password) {
         return {
             id: user_id,
@@ -169,7 +91,7 @@ describe('secure', function () {
         it('should return user when correct password is provided', function (done) {
             bcrypt.hash("password", 10, function (err, hashed_password) {
                 var user = createUser(hashed_password);
-                var db = createDummyDb(user, {});
+                var db = createDummyDb(user, null, {});
                 var strategy = secure.createLocalStrategyVerify(db);
                 strategy("user", "password", function (err, result) {
                     assert.equal(err, null);
@@ -184,7 +106,7 @@ describe('secure', function () {
         it('should return false as second argument when bad password was provided', function (done) {
             bcrypt.hash("password", 10, function (err, hashed_password) {
                 var user = createUser(hashed_password);
-                var db = createDummyDb(user, {});
+                var db = createDummyDb(user, null, {});
                 var strategy = secure.createLocalStrategyVerify(db);
                 strategy("user", "bad_password", function (err, result) {
                     assert.equal(err, null);
@@ -195,7 +117,7 @@ describe('secure', function () {
         });
 
         it('should return false when given user was not found', function (done) {
-            var db = createDummyDb({}, {isnull: true});
+            var db = createDummyDb({}, null, {isnull: true});
             var strategy = secure.createLocalStrategyVerify(db);
             strategy("user", "password", function (err, result) {
                 assert.equal(err, null);
@@ -205,7 +127,7 @@ describe('secure', function () {
         });
 
         it('should return error when there was error during reading from db', function (done) {
-            var db = createDummyDb({}, {iserror_find: true});
+            var db = createDummyDb({}, null, {iserror_find: true});
             var strategy = secure.createLocalStrategyVerify(db);
             strategy("user", "password", function (err, result) {
                 assert(err instanceof Error);
@@ -218,7 +140,7 @@ describe('secure', function () {
         it('should serialize user - return id of that user', function (done) {
             bcrypt.hash("password", 10, function (err, hashed_password) {
                 var user = createUser(hashed_password);
-                var db = createDummyDb(user, {});
+                var db = createDummyDb(user, null, {});
                 var strategy = secure.createLocalStrategyVerify(db);
                 var serialize = secure.createSerializeUser(db);
                 strategy("user", "password", function (err, user) {
@@ -235,7 +157,7 @@ describe('secure', function () {
     describe('#createDeserializeUser', function () {
         it('should return user object from database', function (done) {
             var user = createUser("password");
-            var db = createDummyDb(user, {});
+            var db = createDummyDb(user, null, {});
             var deserialize = secure.createDeserializeUser(db);
             deserialize(user_id, function (err, result) {
                 assert.equal(err, null);
@@ -247,7 +169,7 @@ describe('secure', function () {
         });
 
         it('should return error when user was not found', function (done) {
-            var db = createDummyDb({}, {isnull: true});
+            var db = createDummyDb({}, null, {isnull: true});
             var deserialize = secure.createDeserializeUser(db);
             deserialize(user_id, function (err, result) {
                 assert(err instanceof Error);
@@ -256,7 +178,7 @@ describe('secure', function () {
         });
 
         it('should return error when there was error during reading from db', function (done) {
-            var db = createDummyDb({}, {iserror_find: true});
+            var db = createDummyDb({}, null, {iserror_find: true});
             var deserialize = secure.createDeserializeUser(db);
             deserialize(user_id, function (err, user) {
                 assert(err instanceof Error);
@@ -267,7 +189,7 @@ describe('secure', function () {
 
     describe('#createUser', function () {
         it('should create user with provided arguments', function (done) {
-            var db = createDummyDb({}, {isnull: true});
+            var db = createDummyDb({}, null, {isnull: true});
             var args = {
                 username: "user",
                 password: "password",
@@ -292,7 +214,7 @@ describe('secure', function () {
         });
 
         it('should use correct values from form and also default quota when quota is not provided', function (done) {
-            var db = createDummyDb({}, {isnull: true});
+            var db = createDummyDb({}, null, {isnull: true});
             var args = {
                 username: "user",
                 password: "password",
@@ -314,7 +236,7 @@ describe('secure', function () {
         it('should not create user without password or username', function (done) {
             async.parallel([
                 function (callback) {
-                    var db = createDummyDb({}, {isnull: true});
+                    var db = createDummyDb({}, null, {isnull: true});
                     var args = {
                         username: "user"
                     };
@@ -324,7 +246,7 @@ describe('secure', function () {
                     });
                 },
                 function (callback) {
-                    var db = createDummyDb({}, {isnull: true});
+                    var db = createDummyDb({}, null, {isnull: true});
                     var args = {
                         password: "password"
                     };
@@ -340,7 +262,7 @@ describe('secure', function () {
 
         it('should return error when user exists', function (done) {
             var user = createUser("password");
-            var db = createDummyDb(user, {});
+            var db = createDummyDb(user, null, {});
             var args = {
                 username: "user",
                 password: "password",
@@ -356,7 +278,7 @@ describe('secure', function () {
         });
 
         it('should return error when there was error during searching db', function (done) {
-            var db = createDummyDb({}, {iserror_find: true});
+            var db = createDummyDb({}, null, {iserror_find: true});
             var args = {
                 username: "user",
                 password: "password",
@@ -372,7 +294,7 @@ describe('secure', function () {
         });
 
         it('should return error when there was error during saving to db', function (done) {
-            var db = createDummyDb({}, {isnull: true, iserror_create: true});
+            var db = createDummyDb({}, null, {isnull: true, iserror_create: true});
             var args = {
                 username: "user",
                 password: "password",
@@ -390,7 +312,7 @@ describe('secure', function () {
 
     describe('#changeUser', function () {
         it('should change user attributes', function (done) {
-            var db = createDummyDb(createUser("password"), {});
+            var db = createDummyDb(createUser("password"), null, {});
             secure.changeUser(db, {
                 username: "user", //TODO: tohle oddelat, ale nejprve spravit v kodu
                 database_id: user_id,
@@ -412,7 +334,7 @@ describe('secure', function () {
         });
 
         it('should change user password', function (done) {
-            var db = createDummyDb(createUser("password"), {});
+            var db = createDummyDb(createUser("password"), null, {});
             secure.changeUser(db, {
                 database_id: user_id,
                 password: "new_password",
@@ -428,7 +350,7 @@ describe('secure', function () {
             async.parallel([
                 function (callback) {
                     var user = createUser("password");
-                    var db = createDummyDb(user, {iserror_update: true});
+                    var db = createDummyDb(user, null, {iserror_update: true});
                     secure.changeUser(db, {
                         database_id: user_id,
                         email: "user@user.com"
@@ -439,7 +361,7 @@ describe('secure', function () {
                 },
                 function (callback) {
                     var user = createUser("password");
-                    var db = createDummyDb(user, {iserror_update: true});
+                    var db = createDummyDb(user, null, {iserror_update: true});
                     secure.changeUser(db, {
                         database_id: user_id,
                         email: "user@user.com",
@@ -455,7 +377,7 @@ describe('secure', function () {
         });
 
         it('should return error when user account was not found', function (done) {
-            var db = createDummyDb({}, {isnull: true});
+            var db = createDummyDb({}, null, {isnull: true});
             secure.changeUser(db, {
                 database_id: user_id,
                 email: "user@user.com"
@@ -466,7 +388,7 @@ describe('secure', function () {
         });
 
         it('should return error when no database_id was provided', function (done) {
-            var db = createDummyDb(createUser("password"), {});
+            var db = createDummyDb(createUser("password"), null, {});
             secure.changeUser(db, {
                 email: "user@user.com"
             }, function (err) {
@@ -476,7 +398,7 @@ describe('secure', function () {
         });
 
         it('should return error when there was error during searching in db', function (done) {
-            var db = createDummyDb(createUser("password"), {isfind_error: true});
+            var db = createDummyDb(createUser("password"), null, {isfind_error: true});
             secure.changeUser(db, {
                 database_id: user_id,
                 email: "user@user.com"
