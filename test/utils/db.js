@@ -83,4 +83,4 @@ module.exports = function (inserted_object, created_success_object, errs) {
             existing: existing_object
         }
     };
-}
+};

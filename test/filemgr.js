@@ -20,14 +20,14 @@ describe('filemgr', function () {
             var user = {used_space: 0, quota: 1000};
             var createdObject = {};
             createdObject.setUser = function (user_to_set) {
-                assert.equal(user_to_set, user)
+                assert.equal(user_to_set, user);
             };
             var db = createDummyDb(null, createdObject, {});
             async.parallel([
                 function (callback) {
                     user.save = function () {
                         callback();
-                    }
+                    };
                 },
                 function (callback) {
                     filemgr.uploadAndSaveFile(s3bucket, stream, user, db, function (err) {
@@ -63,7 +63,7 @@ describe('filemgr', function () {
         it('should return error when there was error during reading from db', function (done) {
             var stream = {byteCount: 100, filename: 'filename'};
             var s3bucket = {};
-            s3bucket.putObject = function (object, after) {after()};
+            s3bucket.putObject = function (object, after) {after();};
             var user = {used_space: 0, quota: 150};
             var db = createDummyDb(null, null, {iserror_create: true});
             filemgr.uploadAndSaveFile(s3bucket, stream, user, db, function (err) {
@@ -76,7 +76,7 @@ describe('filemgr', function () {
         it('should return error when there was error during saving to S3', function (done) {
             var stream = {byteCount: 100, filename: 'filename'};
             var s3bucket = {};
-            s3bucket.putObject = function (object, after) {after(new Error('S3 error'))};
+            s3bucket.putObject = function (object, after) {after(new Error('S3 error'));};
             var user = {used_space: 0, quota: 150};
             var db = createDummyDb(null, null, {iserror_create: true});
             filemgr.uploadAndSaveFile(s3bucket, stream, user, db, function (err) {
