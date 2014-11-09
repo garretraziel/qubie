@@ -2,7 +2,9 @@ extends base_admin
 
 block content
     if user
+        h2 User #{user.username}
         p: a(href="/admin/user/" + user.id + "/edit") Edit user
+        p: a(href="/admin/user/" + user.id + "/delete") Delete user
         table
             tr
                 td(align="right"): b Name
@@ -10,24 +12,17 @@ block content
             tr
                 td(align="right"): b Email
                 td(align="left")= user.email
-            if user.premium
-                tr
-                    td(align="right"): b Premium
+            tr
+                td(align="right"): b Premium
+                if user.premium
                     td(align="left") true
-                tr
-                    td(align="right"): b Premium until
-                    td(align="left")= user.premium_to
-            else
-                tr
-                    td(align="right"): b Premium
+                else
                     td(align="left") false
-            if user.admin
-                tr
-                    td(align="right"): b Admin
+            tr
+                td(align="right"): b Admin
+                if user.admin
                     td(align="left") true
-            else
-                tr
-                    td(align="right"): b Admin
+                else
                     td(align="left") false
             tr
                 td(align="right"): b Quota
@@ -35,5 +30,12 @@ block content
             tr
                 td(align="right"): b Space used
                 td(align="left")= user.used_space
+        if documents && documents.length > 0
+            hr
+            h2 Documents
+            ul
+                each document in documents
+                    li: a(href="/admin/document/" + document.id)= document.name
+                        a(href="/admin/document/" + document.id + "/delete") delete
     else
         p User was not found!

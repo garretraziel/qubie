@@ -1,0 +1,29 @@
+extends base_admin
+
+block content
+    if document
+        h2 Document #{document.name}
+        p: a(href="/admin/document/" + document.id + "/edit") Edit document
+        p: a(href="/admin/document/" + document.id + "/delete") Delete document
+        table
+            tr
+                td(align="right"): b Name
+                td(align="left")= document.name
+            tr
+                td(align="right"): b S3 key
+                td(align="left")= document.key
+            tr
+                td(align="right"): b Uploaded at
+                if document.uploaded_at
+                    td(align="left")= document.uploaded_at
+                else
+                    td(align="left") false
+            tr
+                td(align="right"): b Size
+                td(align="left")= document.size
+            if user
+                tr
+                    td(align="right"): b Owner
+                    td(align="left"): a(href="/admin/user/" + user.id)= user.username
+    else
+        p Document was not found!

@@ -1,0 +1,8 @@
+extends base_admin
+
+block content
+    p: b To delete #{name}, type "delete" into this form:
+    form(method="post")
+        input(type="text", placeholder="Type 'delete'", name="input", autofocus)
+        input(type="hidden", name="_csrf", value=csrftoken)
+        input(type="submit", value="Delete")

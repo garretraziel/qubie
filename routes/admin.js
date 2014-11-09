@@ -1,8 +1,11 @@
 var express = require('express');
+var winston = require('winston');
+var async = require('async');
 
 var secure = require('../lib/secure');
+var filemgr = require('../lib/filemgr');
 
-module.exports = function (config, db) {
+module.exports = function (config, db, s3bucket) {
     var router = express.Router();
 
     router.use(function (req, res, next) {
@@ -27,6 +30,9 @@ module.exports = function (config, db) {
     });
 
     router.get('/', function (req, res) {
+        res.redirect('/admin/users');
+    });
+    router.get('/users', function (req, res) {
         if (req.query.search_name) {
             db.User.findAll({
                 where: ["username like ?", '%' + req.query.search_name + '%']
@@ -48,7 +54,12 @@ module.exports = function (config, db) {
             if (user === null) {
                 res.render('404');
             } else {
-                res.render('admin/user_detail', {user: user}); // TODO: vyrenderovat i jeho dokumenty
+                user.getDocuments().success(function (documents) {
+                    res.render('admin/user_detail', {user: user, documents: documents});
+                }).error(function (err) {
+                    winston.error("during reading user documents: %s", String(err));
+                    res.render('admin/user_detail', {user: user});
+                });
             }
         });
     });
@@ -81,6 +92,55 @@ module.exports = function (config, db) {
                 }
             });
         });
+    router.route('/user/:database_id/delete')
+        .get(function (req, res) {
+            db.User.find(req.params.database_id).success(function (user) {
+                if (user === null) {
+                    res.render('404');
+                } else {
+                    res.render('admin/delete', {name: user.username});
+                }
+            });
+        })
+        .post(function (req, res) {
+            if (req.body.input === "delete") {
+                async.waterfall([
+                    function (callback) {
+                        db.User.find(req.params.database_id).success(function (user) {
+                            callback(null, user);
+                        }).error(function (err) {
+                            callback(err);
+                        });
+                    },
+                    function (user, callback) {
+                        user.getDocuments().success(function (documents) {
+                            callback(null, user, documents);
+                        }).error(function (err) {
+                            callback(err);
+                        });
+                    },
+                    function (user, documents, callback) {
+                        async.each(documents, function (document, callback2) {
+                            filemgr.deleteFile(s3bucket, document.id, user, db, callback2);
+                        }, function (err) {
+                            if (err) {
+                                callback(err);
+                            } else {
+                                user.destroy();
+                                callback(null);
+                            }
+                        });
+                    }
+                ], function (err) {
+                    if (err) {
+                        winston.error('during deleting user files: %s', String(err));
+                    }
+                    res.redirect('/admin/users');
+                });
+            } else {
+                res.redirect('/admin/user/' + req.params.database_id);
+            }
+        });
     router.route('/user/new')
         .get(function (req, res) {
             res.render('admin/user_edit', {user: {}});
@@ -102,6 +162,39 @@ module.exports = function (config, db) {
                 }
             });
         });
+
+    router.get('/documents', function (req, res) {
+        if (req.query.search_name) {
+            db.Document.findAll({
+                where: ["name like ?", '%' + req.query.search_name + '%']
+            }).success(function (documents) {
+                res.render('admin/documents', {documents: documents});
+            });
+        } else if (req.query.search_key) {
+            db.Document.findAll({where: {key: req.query.search_key}}).success(function (documents) {
+                res.render('admin/documents', {documents: documents});
+            });
+        } else {
+            db.Document.all().success(function (documents) {
+                res.render('admin/documents', {documents: documents});
+            });
+        }
+    });
+    router.get('/document/:database_id', function (req, res) {
+        db.Document.find(req.params.database_id).success(function (document) {
+            if (document === null) {
+                res.render('404');
+            } else {
+                document.getUser().success(function (user) {
+                    res.render('admin/document_detail', {document: document, user: user});
+                }).error(function (err) {
+                    winston.error('during reading document owner: %s', String(err));
+                    res.render('admin/document_detail', {document: document});
+                });
+            }
+        });
+    });
+    // TODO: document edit, new, delete
 
     return router;
 };

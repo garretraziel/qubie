@@ -1,0 +1,15 @@
+extends base_admin
+
+block content
+    p: a(href="/admin/document/new") Create new document
+    .search-form
+        form(method="get")
+            input(type="text", placeholder="Name (fuzzy)", name="search_name", autofocus)
+            input(type="text", placeholder="Key", name="search_key")
+            input(type="submit", value="Search")
+    if documents && documents.length > 0
+        ul
+            each document in documents
+                li.document-item: a(href="/admin/document/" + document.id)= document.name
+    else
+        p Nutin.
