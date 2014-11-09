@@ -4,3 +4,8 @@ bower_components/*
 npm-debug.log
 access.log
 system.log
+.DS_Store
+dump.rdb
+heapdump-*
+*.pdf
+env.sh
