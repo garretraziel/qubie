@@ -1,0 +1,22 @@
+extends base_admin
+
+block content
+    if document
+        form(method="post")
+            p
+                b Name
+                input(type="text", name="name", value=document.name)
+            p
+                b Key
+                input(type="text", name="key", value=document.key)
+            p
+                b Uploaded at
+                input(type="text", name="uploaded_at", value=document.uploaded_at)
+            p
+                b Owner
+                if user
+                    input(type="text", name="owner", value=user.id)
+                else
+                    input(type="text", name="owner")
+    else
+        p Document was not found!

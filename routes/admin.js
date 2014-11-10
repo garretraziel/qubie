@@ -85,7 +85,7 @@ module.exports = function (config, db, s3bucket) {
                 password: req.body.password
             }, function (err) {
                 if (err) {
-                    console.error('ERR during changing user: ', err);
+                    winston.error('during changing user: %s', String(err));
                     res.redirect('back');
                 } else {
                     res.redirect('/admin/user/' + req.params.database_id);
@@ -155,7 +155,7 @@ module.exports = function (config, db, s3bucket) {
                 quota: req.body.quota
             }, function (err) {
                 if (err) {
-                    console.error('ERR during creating user: ', err);
+                    winston.error('during creating user: %s', String(err));
                     res.redirect('/admin/user/new');
                 } else {
                     res.redirect('/admin'); // TODO: flash!
@@ -194,6 +194,34 @@ module.exports = function (config, db, s3bucket) {
             }
         });
     });
+    router.route('/document/:database_id/edit')
+        .get(function (req, res) {
+            db.Document.find(req.params.database_id).success(function (document) {
+                if (document === null) {
+                    res.render('404');
+                } else {
+                    document.getUser().success(function (user) {
+                        res.render('admin/document_edit', {document:document, user: user});
+                    })
+                }
+            });
+        })
+        .post(function (req, res) {
+            filemgr.changeDbFile(db, {
+                database_id: req.params.database_id,
+                name: req.body.name,
+                key: req.body.key,
+                uploaded_at: req.body.uploaded_at,
+                owner: req.body.owner
+            }, function (err) {
+                if (err) {
+                    winston.error('during changing document: %s', String(err));
+                    res.redirect('back');
+                } else {
+                    res.redirect('/admin/document/' + req.params.database_id);
+                }
+            });
+        });
     // TODO: document edit, new, delete
 
     return router;
