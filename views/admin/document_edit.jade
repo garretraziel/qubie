@@ -18,5 +18,10 @@ block content
                     input(type="text", name="owner", value=user.id)
                 else
                     input(type="text", name="owner")
+                b Change owner:
+                input(type="checkbox", name="change_owner", value=false)
+            input(type="hidden", name="_csrf", value=csrftoken)
+            p
+                input(type="submit", value="Save")
     else
         p Document was not found!

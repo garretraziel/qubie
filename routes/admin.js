@@ -212,7 +212,8 @@ module.exports = function (config, db, s3bucket) {
                 name: req.body.name,
                 key: req.body.key,
                 uploaded_at: req.body.uploaded_at,
-                owner: req.body.owner
+                owner: req.body.owner,
+                change_owner: req.body.change_owner
             }, function (err) {
                 if (err) {
                     winston.error('during changing document: %s', String(err));
