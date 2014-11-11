@@ -6,7 +6,7 @@ append head
 block content
     h3 Info
     p.
-        Currently using #{used_space} out of #{user.quota}.
+        Currently using <span id="used_space">#{used_space}</span> out of #{user.quota}.
 
     h3 Documents
     if documents.length > 0

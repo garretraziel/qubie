@@ -11,6 +11,9 @@ define(function (require) {
         socket.on('deleted', function (document_id) {
             $("#" + document_id + "_item").remove();
         });
+        socket.on('used_space_update', function (used_space) {
+            $("#used_space").text(used_space);
+        });
         $('.deleter').click(function () {
             socket.emit('delete', $(this).attr("document"));
         });
