@@ -54,11 +54,25 @@ module.exports = function (config, db, s3bucket) {
             if (user === null) {
                 res.render('404');
             } else {
-                user.getDocuments().success(function (documents) {
-                    res.render('admin/user_detail', {user: user, documents: documents});
-                }).error(function (err) {
-                    winston.error("during reading user documents: %s", String(err));
-                    res.render('admin/user_detail', {user: user});
+                async.parallel({
+                    documents: function (callback) {
+                        user.getDocuments().success(function (documents) {
+                            callback(null, documents);
+                        }).error(function (err) {
+                            callback(err);
+                        });
+                    },
+                    used_space: function (callback) {
+                        user.used_space(callback);
+                    }
+                }, function (err, results) {
+                    if (err) {
+                        winston.error("during reading user documents: %s", String(err));
+                        res.render('admin/user_detail', {user: user});
+                    } else {
+                        results.user = user;
+                        res.render('admin/user_detail', results);
+                    }
                 });
             }
         });

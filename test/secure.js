@@ -18,7 +18,7 @@ describe('secure', function () {
             premium: true,
             admin: false,
             quota: 1234,
-            used_space: 0
+            used_space: function (d) {d(null, 0);}
         };
     };
 
@@ -205,7 +205,6 @@ describe('secure', function () {
                 assert.equal(db.User.created.premium, false);
                 assert.equal(db.User.created.admin, true);
                 assert.equal(db.User.created.quota, 1234);
-                assert.equal(db.User.created.used_space, 0);
                 bcrypt.compare("password", db.User.created.password, function (err, result) {
                     assert.equal(result, true);
                     done();
@@ -328,7 +327,6 @@ describe('secure', function () {
                 assert.equal(db.User.existing.premium, false);
                 assert.equal(db.User.existing.admin, false);
                 assert.equal(db.User.existing.quota, 4321);
-                assert.equal(db.User.existing.used_space, 0);
                 done();
             });
         });

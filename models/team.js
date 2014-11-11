@@ -7,7 +7,20 @@ module.exports = function (sequelize, DataTypes) {
         logo_key: DataTypes.STRING,
         members: DataTypes.INTEGER,
         members_limit: DataTypes.INTEGER,
-        quota: DataTypes.FLOAT,
-        used_space: DataTypes.FLOAT
+        quota: DataTypes.FLOAT
+    }, {
+        instanceMethods: {
+            used_space: function (done) {
+                this.getDocuments().success(function (documents) {
+                    var used = 0;
+                    documents.forEach(function (document) {
+                        used += document.size;
+                    });
+                    done(null, used);
+                }).error(function (err) {
+                    done(err);
+                });
+            }
+        }
     });
 };

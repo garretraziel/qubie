@@ -6,7 +6,7 @@ append head
 block content
     h3 Info
     p.
-        Currently using #{user.used_space} out of #{user.quota}.
+        Currently using #{used_space} out of #{user.quota}.
 
     h3 Documents
     if documents.length > 0
@@ -18,4 +18,3 @@ block content
                     span.fa.fa-trash-o.deleter(document=document.id)
     else
         p Nutin.
-

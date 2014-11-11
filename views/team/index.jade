@@ -5,7 +5,7 @@ block content
 
     h3 Info
     p.
-        Currently using #{team.members} out of #{team.members_limit} users and #{team.used_space} out of #{team.quota}
+        Currently using #{team.members} out of #{team.members_limit} users and #{used_space} out of #{team.quota}
         space.
 
     h3 Users
@@ -14,6 +14,6 @@ block content
             each user in users
                 li
                     p= user.username
-                    span.space_used= user.used_space
+                    //span.space_used= user.used_space
     else
         p Nutin.

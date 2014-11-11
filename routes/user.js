@@ -1,5 +1,6 @@
 var express = require('express');
 var multiparty = require('multiparty');
+var async = require('async');
 var fs = require('fs');
 
 var filemgr = require('../lib/filemgr');
@@ -16,8 +17,25 @@ module.exports = function (config, db, memstore, s3bucket) {
     });
 
     router.get('/', function (req, res) {
-        req.user.getDocuments().success(function (documents) {
-            res.render('user', {documents: documents, user: req.user});
+        async.parallel({
+            documents: function (callback) {
+                req.user.getDocuments().success(function (documents) {
+                    callback(null, documents);
+                }).error(function (err) {
+                    callback(err);
+                });
+            },
+            used_space: function (callback) {
+                req.user.used_space(callback);
+            }
+        }, function (err, results) {
+            if (err) {
+                winston.error('during rendering user page: %s', String(err));
+                res.redirect('/fail');
+            } else {
+                results.user = req.user;
+                res.render('user', results);
+            }
         });
     });
     router.route('/upload')

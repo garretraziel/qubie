@@ -1,4 +1,5 @@
 var express = require('express');
+var winston = require('winston');
 
 module.exports = function (config, db, memstore) {
     var router = express.Router();
@@ -28,9 +29,16 @@ module.exports = function (config, db, memstore) {
             team = t;
             return t.getUsers();
         }).then(function (users) {
-            res.render('team', {users: users, team: team});
+            team.used_space(function (err, used_space) {
+                if (err) {
+                    winston.error('during reading team used space: %s', String(err));
+                    res.render('team', {users: users, team: team});
+                } else {
+                    res.render('team', {users: users, team: team, used_space: used_space});
+                }
+            });
         }, function (err) {
-            console.error("Error during rendering team with users:", err);
+            winston.error("during rendering team with users: %s", String(err));
             res.redirect('/fail');
         });
     });
