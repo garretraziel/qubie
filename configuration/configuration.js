@@ -16,7 +16,7 @@ var development = {
     views: path.join(__dirname, "../views"),
     postgres_uri: "postgres://node:node@localhost:5432/node",
     redis_uri: "redis://localhost:6379",
-    level_db: "../level.db",
+    level_db: "/tmp/level.db",
     logging: true,
     aws_bucket: "qubie",
     link_url: util.format('https://%s:%d', os.hostname(), 8080),
