@@ -6,31 +6,14 @@ define(function (require) {
     var socket = io();
     var page;
 
+    var canvas = document.getElementById('cnvs');
+    var context = canvas.getContext('2d');
+    var c_width = window.innerWidth;
+    var c_height = window.innerHeight;
+    canvas.width = c_width;
+    canvas.height = c_height;
+
     vex.defaultOptions.className = 'vex-theme-plain';
-
-    $(document).ready(function () {
-        $("#leftbtn").on('click', function () {
-            if (page > 0) {
-                page--;
-                socket.emit('page', page);
-            }
-        });
-
-        $("#rightbtn").on('click', function () {
-            page++;
-            socket.emit('page', page);
-        });
-
-        vexdialog.open({
-            message: "Your name:",
-            input: '<input name="name" type="text">',
-            callback: function (data) {
-                if (data !== false) {
-                    socket.emit('auth', data.name);
-                }
-            }
-        });
-    });
 
     socket.on('connect', function () {
         socket.emit('join', {role: "presenter", pres_id: pres_id});
@@ -71,5 +54,41 @@ define(function (require) {
     });
     socket.on('document_url', function (doc_url) {
         vexdialog.alert(doc_url);
+    });
+
+    $(document).ready(function () {
+        $("#leftbtn").on('click', function () {
+            if (page > 0) {
+                page--;
+                socket.emit('page', page);
+            }
+        });
+
+        $("#rightbtn").on('click', function () {
+            page++;
+            socket.emit('page', page);
+        });
+
+        //TODO: tohle presunout do knihovny zvlast
+        $(window).resize(function () {
+            c_width = window.innerWidth;
+            c_height = window.innerHeight;
+            canvas.width = c_width;
+            canvas.height = c_height;
+        });
+
+        $('#cnvs').mousedown(function (e) {
+
+        });
+
+        vexdialog.open({
+            message: "Your name:",
+            input: '<input name="name" type="text">',
+            callback: function (data) {
+                if (data !== false) {
+                    socket.emit('auth', data.name);
+                }
+            }
+        });
     });
 });

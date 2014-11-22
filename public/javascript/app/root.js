@@ -9,11 +9,16 @@ define(function (require) {
     var socket = io();
     var canvas = document.getElementById('cnvs');
     var context = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    var c_width = window.innerWidth;
+    var c_height = window.innerHeight;
+    canvas.width = c_width;
+    canvas.height = c_height;
     var loaded_pdf, loaded_page, original_viewport;
     var render_promise, rerender_timeout;
     var act_page = 1;
+
+    var pencil_color = "black";
+    var pencil_width = 2;
 
     var presenter_url;
 
@@ -61,7 +66,8 @@ define(function (require) {
 
     socket.on('auth_request', function (request) {
         vexdialog.open({
-            message: "Presenter " + request.name + " connected. Password:", // TODO: tady hrozi nejaky JavaScript injection
+            // TODO: tady hrozi nejaky JavaScript injection
+            message: "Presenter " + request.name + " connected. Password:",
             input: '<input name="passwd" type="password">',
             callback: function (data) {
                 var response = {};
@@ -83,6 +89,20 @@ define(function (require) {
         vexdialog.alert('Presenter url: ' + url);
     });
 
+    socket.on('pencil_event', function (coordinates) {
+        var from_x = c_width*coordinates.from[0];
+        var from_y = c_height*coordinates.from[1];
+        var to_x = c_width*coordinates.to[0];
+        var to_y = c_height*coordinates.to[1];
+        context.beginPath();
+        context.moveTo(from_x, from_y);
+        context.lineTo(to_x, to_y);
+        context.strokeStyle = pencil_color;
+        context.lineWidth = pencil_width;
+        context.stroke();
+        context.closePath();
+    });
+
     $(document).ready(function () {
         PDFJS.getDocument(URL).then(function (pdf) {
             loaded_pdf = pdf;
@@ -92,8 +112,10 @@ define(function (require) {
             if (rerender_timeout) {
                 window.clearTimeout(rerender_timeout);
             }
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            c_width = window.innerWidth;
+            c_height = window.innerHeight;
+            canvas.width = c_width;
+            canvas.height = c_height;
             rerender_timeout = window.setTimeout(function () {
                 rerenderPage();
             }, 500); // TODO: tohle resit trochu lip
