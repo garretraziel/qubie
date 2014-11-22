@@ -71,10 +71,4 @@ describe('filemgr', function () {
             });
         });
     });
-
-    describe.skip('#deleteFile', function () {
-        it('should delete file from S3, db, lower used_space and call done', function (done) {
-
-        });
-    });
 });

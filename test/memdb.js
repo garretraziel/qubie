@@ -61,21 +61,6 @@ describe('memdb', function () {
         return done(new Error('Cannot get values from redis'));
     };
 
-    describe.skip('#init', function () {
-        it('should connect to redis providing redis url', function () {
-            var redisClient = memdb.init(config);
-
-            assert(redisClient instanceof redis.RedisClient);
-        });
-
-        it('should authenticate when password is provided in redis uri', function () {
-            var redisClient = memdb.init(passConfig);
-
-            assert(redisClient instanceof redis.RedisClient);
-            // TODO: check ze je klient autentizovany
-        });
-    });
-
     describe('#getPage', function () {
         it('should return page value from memstore', function (done) {
             memdb.getPage(memstore, id, default_page, function (obtained_page) {
