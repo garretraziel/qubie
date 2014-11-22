@@ -13,12 +13,14 @@ var configuration = require('./configuration/configuration');
 var setup = require('./lib/setup');
 var bc11m = require('./lib/bc11n');
 var memdb = require('./lib/memdb');
+var drawdb = require('./lib/drawdb');
 var models = require('./models');
 
 var app = express();
 var config = configuration[app.get('env')];
 var db = models(config);
 var memstore = memdb.init(config);
+var drawstore = drawdb.init(config);
 var server;
 
 function runServer() {
@@ -33,7 +35,7 @@ function runServer() {
         server = http.createServer(app);
     }
 
-    bc11m.init(server, config, db, memstore, sessionStore);
+    bc11m.init(server, config, db, memstore, sessionStore, drawstore);
 
     server.listen(config.port, function () {
         console.log("App is running on port " + config.port);
