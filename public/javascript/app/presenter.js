@@ -78,7 +78,7 @@ define(function (require) {
         });
 
         $('#cnvs').mousedown(function (e) {
-
+            //TODO: kresleni
         });
 
         vexdialog.open({

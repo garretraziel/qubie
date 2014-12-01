@@ -8,6 +8,7 @@ var https = require('https');
 var express = require('express');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
+var winston = require('winston');
 
 var configuration = require('./configuration/configuration');
 var setup = require('./lib/setup');
@@ -42,9 +43,10 @@ function runServer() {
     });
 }
 
-db.sequelize.sync().success(function (err) {
+db.sequelize.sync().complete(function (err) {
     if (err) {
-        throw err[0];
+        winston.error('during syncing database: %s', String(err))
+    } else {
+        runServer();
     }
-    runServer();
 });
