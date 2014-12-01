@@ -42,7 +42,7 @@ function runServer() {
     });
 }
 
-db.sequelize.sync().complete(function (err) {
+db.sequelize.sync().success(function (err) {
     if (err) {
         throw err[0];
     }
