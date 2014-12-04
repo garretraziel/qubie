@@ -19,6 +19,6 @@
   "dependencies": {
     "vex": "~2.2.1",
     "requirejs": "~2.1.14",
-    "pdfjs-dist": "~1.0.892"
+    "pdfjs-dist": "~1.0.962"
   }
 }
