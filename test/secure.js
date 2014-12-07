@@ -337,7 +337,7 @@ describe('secure', function () {
             var db = createDummyDb(createUser("password"), null, {});
             secure.changeUser(db, {
                 database_id: user_id,
-                password: "new_password",
+                password: "new_password"
             }, function (err) {
                 bcrypt.compare("new_password", db.User.existing.password, function (err, result) {
                     assert.equal(result, true);

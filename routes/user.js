@@ -4,6 +4,7 @@ var express = require('express');
 var multiparty = require('multiparty');
 var async = require('async');
 var fs = require('fs');
+var winston = require('winston');
 
 var filemgr = require('../lib/filemgr');
 

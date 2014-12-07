@@ -29,7 +29,7 @@ function createLeveldb(init_values, fail_put) {
     db.del = function (id, callback) {
         delete this[id];
         callback();
-    }
+    };
     return db;
 }
 
@@ -52,7 +52,7 @@ describe('drawdb', function () {
         it('should add another event to events for page', function (done) {
             var id_page = id + ":" + page;
             var content = {};
-            var oldvalue = {from: [0,0], to: [100, 200]};
+            var oldvalue = {from: [0, 0], to: [100, 200]};
             content[id_page] = [oldvalue];
             content[id] = [page];
             var db = createLeveldb(content, false);
@@ -74,9 +74,9 @@ describe('drawdb', function () {
             content[id] = [page];
             var db = createLeveldb(content, false);
             var value = {from: [100, 200], to: [50, 60]};
-            drawdb.putDrawingEvent(db, id, page+1, value, function (err) {
+            drawdb.putDrawingEvent(db, id, page + 1, value, function (err) {
                 assert.equal(err, null);
-                assert.deepEqual(db[id], [page, page+1]);
+                assert.deepEqual(db[id], [page, page + 1]);
                 assert.deepEqual(db[id_page], [oldvalue]);
                 assert.deepEqual(db[id_page_n], [value]);
                 done();
@@ -85,17 +85,17 @@ describe('drawdb', function () {
 
         it('should add another document and page when doc and page are different', function (done) {
             var id_page = id + ":" + page;
-            var id_n_page = (id+1) + ":" + page;
+            var id_n_page = (id + 1) + ":" + page;
             var content = {};
-            var oldvalue = {from: [0,0], to: [100, 200]};
+            var oldvalue = {from: [0, 0], to: [100, 200]};
             content[id_page] = [oldvalue];
             content[id] = [page];
             var db = createLeveldb(content, false);
             var value = {from: [100, 200], to: [50, 60]};
-            drawdb.putDrawingEvent(db, id+1, page, value, function (err) {
+            drawdb.putDrawingEvent(db, id + 1, page, value, function (err) {
                 assert.equal(err, null);
                 assert.deepEqual(db[id], [page]);
-                assert.deepEqual(db[id+1], [page]);
+                assert.deepEqual(db[id + 1], [page]);
                 assert.deepEqual(db[id_page], [oldvalue]);
                 assert.deepEqual(db[id_n_page], [value]);
                 done();
@@ -115,7 +115,7 @@ describe('drawdb', function () {
         it('should return array of drawing events for page', function (done) {
             var id_page = id + ":" + page;
             var content = {};
-            var oldvalue = {from: [0,0], to: [100, 200]};
+            var oldvalue = {from: [0, 0], to: [100, 200]};
             var value = {from: [100, 200], to: [50, 60]};
             content[id_page] = [oldvalue, value];
             content[id] = [page];
@@ -140,14 +140,14 @@ describe('drawdb', function () {
             var id_page = id + ":" + page;
             var id_page_n = id + ":" + (page + 1);
             var content = {};
-            var oldvalue = {from: [0,0], to: [100, 200]};
+            var oldvalue = {from: [0, 0], to: [100, 200]};
             var value = {from: [100, 200], to: [50, 60]};
             content[id_page] = [oldvalue, value];
             content[id_page_n] = [value];
-            content[id] = [page, page+1];
+            content[id] = [page, page + 1];
             var db = createLeveldb(content, false);
             drawdb.deleteDrawingsForPage(db, id, page, function() {
-                assert.deepEqual(db[id], [page+1]);
+                assert.deepEqual(db[id], [page + 1]);
                 assert.deepEqual(db[id_page_n], [value]);
                 assert.equal(db[id_page], undefined);
                 done();

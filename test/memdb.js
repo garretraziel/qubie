@@ -342,7 +342,7 @@ describe('memdb', function () {
             memdb.getDocumentFromPdfId(memstore_fail, '0', function (result) {
                 assert.equal(result, false);
                 done();
-            })
+            });
         });
     });
 });

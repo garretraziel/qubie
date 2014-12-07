@@ -92,10 +92,10 @@ define(function (require) {
     });
 
     socket.on('pencil_event', function (coordinates) {
-        var from_x = c_width*coordinates.from[0];
-        var from_y = c_height*coordinates.from[1];
-        var to_x = c_width*coordinates.to[0];
-        var to_y = c_height*coordinates.to[1];
+        var from_x = c_width * coordinates.from[0];
+        var from_y = c_height * coordinates.from[1];
+        var to_x = c_width * coordinates.to[0];
+        var to_y = c_height * coordinates.to[1];
         context.beginPath();
         context.moveTo(from_x, from_y);
         context.lineTo(to_x, to_y);

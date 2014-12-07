@@ -217,8 +217,8 @@ module.exports = function (config, db, s3bucket) {
                     res.render('404');
                 } else {
                     document.getUser().success(function (user) {
-                        res.render('admin/document_edit', {document:document, user: user});
-                    })
+                        res.render('admin/document_edit', {document: document, user: user});
+                    });
                 }
             });
         })

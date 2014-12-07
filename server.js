@@ -47,7 +47,7 @@ function runServer() {
 
 db.sequelize.sync().complete(function (err) {
     if (err) {
-        winston.error('during syncing database: %s', String(err))
+        winston.error('during syncing database: %s', String(err));
     } else {
         runServer();
     }

@@ -50,9 +50,9 @@ module.exports = function (inserted_object, created_success_object, errs) {
     };
     var create_function = function (options) {
         if (!errs.iserror_create) {
-            for (var key in options) {
-                if (options.hasOwnProperty(key)) {
-                    created_object[key] = options[key];
+            for (var k in options) {
+                if (options.hasOwnProperty(k)) {
+                    created_object[k] = options[k];
                 }
             }
         }
