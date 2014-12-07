@@ -1,3 +1,5 @@
+"use strict";
+
 var assert = require('assert');
 var EventEmitter = require('events').EventEmitter;
 var async = require('async');

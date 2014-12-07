@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = function (inserted_object, created_success_object, errs) {
     var existing_object = {};
     var created_object = {};

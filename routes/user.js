@@ -1,3 +1,5 @@
+"use strict";
+
 var express = require('express');
 var multiparty = require('multiparty');
 var async = require('async');

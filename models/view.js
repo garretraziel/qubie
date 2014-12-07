@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define("View", {
         when: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, allowNull: false },
