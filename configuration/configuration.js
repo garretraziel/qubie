@@ -28,6 +28,35 @@ var development = {
     file_log_output: false
 };
 
+var docker = {
+    port: 8080,
+    ssl: true,
+    reverse_proxy: false,
+    options: {
+        key: fs.readFileSync(path.join(__dirname, "../misc/server.key")),
+        cert: fs.readFileSync(path.join(__dirname, "../misc/server.crt"))
+    },
+    secret: "this-is-really-a-secret!",
+    public: path.join(__dirname, "../public"),
+    views: path.join(__dirname, "../views"),
+    postgres_uri: util.format("postgres://%s:%s@%s:%s/postgres",
+                              process.env.POSTGRES_USER,
+                              process.env.POSTGRESS_PASSWORD,
+                              process.env.POSTGRES_PORT_5432_TCP_ADDR,
+                              process.env.POSTGRES_PORT_5432_TCP_PORT),
+    redis_uri: util.format("redis://%s:%s",
+                           process.env.REDIS_PORT_6379_TCP_ADDR,
+                           process.env.REDIS_PORT_6379_TCP_PORT),
+    level_db: "/tmp/level.db",
+    logging: true,
+    aws_bucket: "qubie",
+    link_url: util.format('https://%s:%d', os.hostname(), 8080),
+    default_quota: 1000000,
+    send_mails: false,
+    log_access: false,
+    file_log_output: false
+};
+
 var production = {
     port: 5102,
     ssl: false,
@@ -60,5 +89,6 @@ var production = {
 
 module.exports = {
     "development": development,
-    "production": production
+    "production": production,
+    "docker": docker
 };
