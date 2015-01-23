@@ -12,6 +12,7 @@ Requirements
 - enabled WebSockets
 - AWS S3 instance
 - (hopefully) libreoffice with headless plugin for converting ppt -> pdf
+- Docker (if you want to use it)
 
 Installation
 ------------
@@ -39,3 +40,34 @@ qubie - see misc/nginx.conf. In `/etc/sysconfig/qubie` set
 your PostgreSQL instance, `REDIS_URL` to URL of your Redis instance,
 `LEVEL_DB` to path to leveldb instance and finally, set appropriate `AWS`
 variables. See misc/sysconfig_qubie_template.
+
+Docker
+------
+To run qubie as a Docker container, install docker, then:
+
+    docker build -t username/qubie .
+
+to build Docker image from Dockerfile, then install redis and postgres using:
+
+    docker pull redis
+    docker pull postgres
+
+next, run redis and postgres with:
+
+    docker run --name db -e "POSTGRES_USER=username" -e "POSTGRES_PASSWORD=password" -d postgres
+
+and
+
+    docker run --name memdb -d redis
+
+and then run qubie with:
+
+    docker run --name qubie --link db:POSTGRES --link memdb:REDIS -e \
+     "NODE_ENV=docker_development" -e "POSTGRES_USER=username" -e \
+     "POSTGRES_PASS=password" -e "AWS_ACCESS_KEY_ID=key" -e \
+     "AWS_SECRET_ACCESS_KEY=secret" -e "AWS_REGION=region" -d -p 443:5102 \
+     username/qubie`
+
+(hopefully we will find better way how to set environment variables)
+
+Qubie will be running on `https://localhost:443`.
