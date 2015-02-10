@@ -1,6 +1,8 @@
 "use strict";
 
 var express = require('express');
+var async = require('async');
+var winston = require('winston');
 
 var secure = require('../lib/secure');
 
@@ -30,17 +32,27 @@ module.exports = function (config, db, passport) {
         .post(function (req, res) {
             if (req.body.username === "" || req.body.email === ""
                 || req.body.password === "") {
-                console.error('Bad register credentials submitted');
+                winston.error('bad register credentials submitted');
                 res.redirect('/register'); // TODO: fail fail
             } else {
-                secure.createUser(config, db, {
-                    username: req.body.username,
-                    password: req.body.password,
-                    email: req.body.email,
-                    premium: false,
-                    admin: false
-                }, function (err) {
+                async.waterfall([
+                    function (callback) {
+                        db.User.count().then(function (c) {
+                            callback(null, c);
+                        });
+                    },
+                    function (count, callback) {
+                        secure.createUser(config, db, {
+                            username: req.body.username,
+                            password: req.body.password,
+                            email: req.body.email,
+                            premium: false,
+                            admin: count <= 0
+                        }, callback);
+                    }
+                ], function (err) {
                     if (err) {
+                        winston.error("during creating user: %s", String(err));
                         res.redirect('/register');
                     } else {
                         res.redirect('/login');

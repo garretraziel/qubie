@@ -433,6 +433,41 @@ describe('secure', function () {
         });
     });
 
+    describe('#administrator', function () {
+        it('should add info about user being admin to locals', function (done) {
+            var req = {};
+            req.isAuthenticated = function () {return true;};
+            req.user = {admin: true};
+            var res = {locals: {}};
+            secure.administrator(req, res, function () {
+                assert.equal(res.locals.admin, true);
+                done();
+            });
+        });
+
+        it('should set admin to false when user is not logged in', function (done) {
+            var req = {};
+            req.isAuthenticated = function () {return false;};
+            req.user = {admin: true};
+            var res = {locals: {}};
+            secure.administrator(req, res, function () {
+                assert.equal(res.locals.admin, false);
+                done();
+            });
+        });
+
+        it('should set admin to false when user is not administrator', function (done) {
+            var req = {};
+            req.isAuthenticated = function () {return true;};
+            req.user = {admin: false};
+            var res = {locals: {}};
+            secure.administrator(req, res, function () {
+                assert.equal(res.locals.admin, false);
+                done();
+            });
+        });
+    });
+
     describe('#bindPAuthRoot', function () {
         it('should handle websocket root authentication and call done() when done', function (done) {
             var socket = new EventEmitter();

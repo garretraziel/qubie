@@ -20,6 +20,10 @@ block body
                         li: a(href="/user")
                                 span.fa.fa-user.icon
                                 = username
+                    if admin
+                        li: a(href="/admin")
+                                span.fa.fa-terminal.icon
+                                | admin
 
     block before_content
 

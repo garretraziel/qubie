@@ -24,7 +24,7 @@ AWS instance.
 
 Running
 -------
-Run with `node server.js` or `npm start`.
+Run with `node server.js` or `npm start`. First registered user becomes admin.
 
 Tests
 -----
