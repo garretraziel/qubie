@@ -14,7 +14,7 @@ define(function (require) {
             $("#" + document_id + "_item").remove();
         });
         socket.on('used_space_update', function (used_space) {
-            $("#used_space").text(used_space);
+            $("#used_space").text((used_space / 1000000).toFixed(2));
         });
         $('.deleter').click(function () {
             socket.emit('delete', $(this).attr("document"));

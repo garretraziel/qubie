@@ -53,7 +53,7 @@ module.exports = function (config, db, memstore, s3bucket) {
             form.on('part', function (part) {
                 filemgr.uploadAndSaveFile(s3bucket, part, req.user, db, function (err) {
                     if (err) {
-                        console.error(err);
+                        winston.error("during uploading file: %s", String(err));
                         part.resume(); // TODO: tady naznacit, ze jsem nad limitem
                     }
                 });
