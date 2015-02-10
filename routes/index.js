@@ -34,6 +34,8 @@ module.exports = function (config, db, passport) {
                 || req.body.password === "") {
                 winston.error('bad register credentials submitted');
                 res.redirect('/register'); // TODO: fail fail
+            } else if (req.body.password !== req.body.repeat) {
+                res.redirect('/register');
             } else {
                 async.waterfall([
                     function (callback) {

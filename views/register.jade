@@ -1,11 +1,14 @@
 extends base_page
 
+append head
+    script(data-main="/javascript/register_main", src="/bower_components/requirejs/require.js")
+
 block content
     .register-form
-        form(method="post")
+        form(method="post").form-to-validate
             input(type="text", placeholder="username", name="username", autofocus, required)
-            input(type="password", placeholder="password", name="password", required)
-            input(type="password", placeholder="repeat", required)
-            input(type="text", placeholder="email", name="email", required)
+            input(type="password", placeholder="password", name="password", id="password", required)
+            input(type="password", placeholder="repeat", name="repeat", id="repeat", required)
+            input(type="email", placeholder="email", name="email", required)
             input(type="hidden", name="_csrf", value=csrftoken)
             input(type="submit", value="Register")
