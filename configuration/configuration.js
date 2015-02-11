@@ -87,8 +87,45 @@ var production = {
     system_log_file: "/var/log/qubie/system.log"
 };
 
+var docker_production = {
+    port: 5102,
+    ssl: false,
+    reverse_proxy: true,
+    secret: process.env.SECRET_TOKEN,
+    public: path.join(__dirname, "../public"),
+    views: path.join(__dirname, "../views"),
+    postgres_uri: util.format("postgres://%s:%s@%s:%d/postgres",
+                              process.env.POSTGRES_USER,
+                              process.env.POSTGRES_PASS,
+                              process.env.POSTGRES_PORT_5432_TCP_ADDR,
+                              process.env.POSTGRES_PORT_5432_TCP_PORT),
+    redis_uri: util.format("redis://%s:%d",
+                           process.env.REDIS_PORT_6379_TCP_ADDR,
+                           process.env.REDIS_PORT_6379_TCP_PORT),
+    level_db: "/srv/qubie/level.db",
+    logging: true,
+    aws_bucket: "qubie",
+    link_url: util.format('https://www.%s', "getqubie.com"),
+    default_quota: 1000000,
+    send_mails: true,
+    mail_config: {
+        host: process.env.MAIL_HOST,
+        port: process.env.MAIL_PORT,
+        secure: true,
+        auth: {
+            user: process.env.MAIL_USER,
+            pass: process.env.MAIL_PASS
+        }
+    },
+    log_access: true,
+    access_log_file: "/var/log/qubie/access.log",
+    file_log_output: true,
+    system_log_file: "/var/log/qubie/system.log"
+};
+
 module.exports = {
     "development": development,
     "production": production,
-    "docker_development": docker_development
+    "docker_development": docker_development,
+    "docker_production": docker_production
 };
