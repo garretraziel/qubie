@@ -1,6 +1,8 @@
 qubie
 =====
 
+[![Build Status](https://magnum.travis-ci.com/garretraziel/qubie.svg?token=5QVoyJUFv7JDsLhsxyrx&branch=master)](https://magnum.travis-ci.com/garretraziel/qubie)
+
 Web app for controlling presentations using smartphones and tablets.
 
 Requirements
