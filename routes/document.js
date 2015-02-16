@@ -1,7 +1,9 @@
 "use strict";
 
+var url = require('url');
 var express = require('express');
 var AWS = require('aws-sdk');
+var winston = require('winston');
 
 var memdb = require('../lib/memdb');
 
@@ -41,7 +43,7 @@ module.exports = function (config, db, memstore) {
                    res.redirect('/fail');
                 }
             }, function (err) {
-                console.error("Error during reading document:", err);
+                winston.error("during reading document: %s", String(err));
                 res.redirect('/fail');
             });
         } else {
@@ -69,7 +71,7 @@ module.exports = function (config, db, memstore) {
                     res.redirect('/fail');
                 }
             }, function (err) {
-                console.error("Error during reading document:", err);
+                winston.error("during reading document: %s", String(err));
                 res.redirect('/fail');
             });
         } else {
@@ -94,7 +96,7 @@ module.exports = function (config, db, memstore) {
             } else {
                 db.Document.find(id).success(function (document) {
                     if (document === null) {
-                        console.error('Trying to render document that isn`t in database');
+                        winston.error('when trying to render document that isn`t in database');
                         res.redirect('/fail');
                     } else {
                         var params = {Key: document.key};

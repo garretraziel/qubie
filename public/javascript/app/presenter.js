@@ -1,7 +1,7 @@
 "use strict";
 
 define(function (require) {
-    var $ = require('jquery'); require('jquerymobile');
+    var $ = require('jquery');
     var io = require('socketio');
     var vex = require('vex');
     var vexdialog = require('vexdialog');
@@ -48,8 +48,8 @@ define(function (require) {
         });
     });
     socket.on('auth_completed', function () {
-        $("#leftbtn").removeAttr("disabled");
-        $("#rightbtn").removeAttr("disabled");
+        //$("#leftbtn").removeAttr("disabled");
+        //$("#rightbtn").removeAttr("disabled");
     });
     socket.on('page', function (pagenum) {
         page = pagenum;

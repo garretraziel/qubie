@@ -23,6 +23,7 @@ define(function (require) {
     var pencil_width = 2;
 
     var presenter_url;
+    var qrcode_url;
 
     vex.defaultOptions.className = 'vex-theme-plain';
 
@@ -91,6 +92,13 @@ define(function (require) {
         vexdialog.alert('Presenter url: ' + url);
     });
 
+    socket.on('qrcode_url', function (url) {
+        qrcode_url = url;
+        vex.open({
+            content: '<p>' + presenter_url + '</p><br/><img src="' + url + '">'
+        });
+    });
+
     socket.on('pencil_event', function (coordinates) {
         var from_x = c_width * coordinates.from[0];
         var from_y = c_height * coordinates.from[1];
@@ -137,6 +145,14 @@ define(function (require) {
         });
         $("#presenter").change(function () {
             socket.emit("enable_presenter", $(this).is(':checked'));
+            if ($(this).is(':checked')) {
+                $("#show_qr").removeAttr("disabled");
+            } else {
+                $("#show_qr").attr("disabled", true);
+            }
+        });
+        $("#show_qr").on("click", function () {
+            socket.emit("show_qr");
         });
         /*$("#cntrls").click(function () {
          $(this).animate({

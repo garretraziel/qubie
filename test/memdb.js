@@ -161,8 +161,9 @@ describe('memdb', function () {
 
         it('should return true when presenter is enabled', function (done) {
             memdb.enablePresenter(memstore, id, function () {
-                memdb.presenterEnabled(memstore, id, function (result) {
+                memdb.presenterEnabled(memstore, id, function (result, pres_id) {
                     assert.equal(result, true);
+                    assert.notEqual(pres_id, null);
                     memdb.disablePresenter(memstore, id);
                     done();
                 });

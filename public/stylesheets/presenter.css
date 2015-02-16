@@ -1,0 +1,19 @@
+section {
+    width: 90%;
+    height: 200px;
+    margin: auto;
+    padding: 10px;
+}
+
+div#leftbtn {
+    width: 25%;
+    height: 200px;
+    background: red;
+    float: left;
+}
+
+div#rightbtn {
+    margin-left: 75%;
+    height: 200px;
+    background: black;
+}
