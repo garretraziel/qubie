@@ -19,7 +19,7 @@
   "dependencies": {
     "vex": "~2.3.0",
     "requirejs": "~2.1.16",
-    "pdfjs-dist": "~1.0.1135",
+    "pdfjs-dist": "~1.0.1145",
     "jquery.validation": "~1.13.1",
     "fastclick": "~1.0.6"
   }

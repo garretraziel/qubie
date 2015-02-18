@@ -41,7 +41,7 @@ function runServer() {
     bc11m.init(server, config, db, memstore, sessionStore, drawstore);
 
     server.listen(config.port, function () {
-        console.log("App is running on port " + config.port);
+        winston.info("app is running on port %d", config.port);
     });
 }
 
