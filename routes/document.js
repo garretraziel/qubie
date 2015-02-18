@@ -3,6 +3,7 @@
 var url = require('url');
 var express = require('express');
 var AWS = require('aws-sdk');
+var qr = require('qr-image');
 var winston = require('winston');
 
 var memdb = require('../lib/memdb');
@@ -105,6 +106,12 @@ module.exports = function (config, db, memstore) {
                 });
             }
         });
+    });
+    router.get('/q/:presenter_id', function (req, res) {
+        var document_url = url.resolve(config.link_url, '/document/p/' + req.params.presenter_id);
+        var qr_svg = qr.image(document_url, {type: 'svg'});
+        res.type('svg');
+        qr_svg.pipe(res);
     });
 
     return router;
