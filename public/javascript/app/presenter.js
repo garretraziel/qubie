@@ -1,10 +1,11 @@
 "use strict";
 
 define(function (require) {
-    var $ = require('jquery');
+    var $ = require('jquery'); require('jquerymobile');
     var io = require('socketio');
     var vex = require('vex');
     var vexdialog = require('vexdialog');
+    var FastClick = require('fastclick');
     var socket = io();
     var page;
 
@@ -57,6 +58,8 @@ define(function (require) {
     socket.on('document_url', function (doc_url) {
         vexdialog.alert(doc_url);
     });
+
+    FastClick.attach(document.body);
 
     $(document).ready(function () {
         $("#leftbtn").on('click', function () {
