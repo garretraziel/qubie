@@ -63,7 +63,7 @@ define(function (require) {
 
     $(document).ready(function () {
         $("#leftbtn").on('click', function () {
-            if (page > 0) {
+            if (page > 1) {
                 page--;
                 socket.emit('page', page);
             }
