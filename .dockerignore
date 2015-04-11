@@ -1,5 +1,6 @@
 .git
 Dockerfile
+.dockerignore
 bower_components
 env.sh
 node_modules
@@ -8,6 +9,7 @@ README.md
 misc/logo.png
 misc/logo.svg
 misc/nginx.conf
+misc/nginx_docker
 misc/qubie.service
 misc/service_list
 misc/sysconfig_qubie_template

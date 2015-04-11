@@ -9,3 +9,5 @@ dump.rdb
 heapdump-*
 *.pdf
 env.sh
+misc/nginx_docker/server.key
+misc/nginx_docker/server.crt
