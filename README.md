@@ -67,7 +67,7 @@ and then run qubie with:
 
     docker run --name qubie --link db:db --link memdb:memdb -e \
      "SECRET_TOKEN=secret" -e "POSTGRES_USER=username" -e \
-     "POSTGRES_PASS=password" -e "AWS_ACCESS_KEY_ID=key" -e \
+     "POSTGRES_PASSWORD=password" -e "AWS_ACCESS_KEY_ID=key" -e \
      "AWS_SECRET_ACCESS_KEY=secret" -e "AWS_REGION=region" -d -p 5102:5102 \
      username/qubie
 
@@ -82,7 +82,7 @@ production!), run:
 
     docker run --name qubie --link db:db --link memdb:memdb -e \
      "SECRET_TOKEN=secret" -e "POSTGRES_USER=username" -e \
-     "POSTGRES_PASS=password" -e "AWS_ACCESS_KEY_ID=key" -e \
+     "POSTGRES_PASSWORD=password" -e "AWS_ACCESS_KEY_ID=key" -e \
      "AWS_SECRET_ACCESS_KEY=secret" -e "AWS_REGION=region" -e \
      "NODE_ENV=docker_development" -d -p 5102:5102 \
      username/qubie
