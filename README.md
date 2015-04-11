@@ -65,15 +65,26 @@ and
 
 and then run qubie with:
 
-    docker run --name qubie --link db:POSTGRES --link memdb:REDIS -e \
+    docker run --name qubie --link db:db --link memdb:memdb -e \
      "SECRET_TOKEN=secret" -e "POSTGRES_USER=username" -e \
      "POSTGRES_PASS=password" -e "AWS_ACCESS_KEY_ID=key" -e \
      "AWS_SECRET_ACCESS_KEY=secret" -e "AWS_REGION=region" -d -p 5102:5102 \
-     username/qubie`
+     username/qubie
 
 (hopefully we will find better way how to set environment variables)
 
 You will have to use nginx as a forward proxy. There is no clean way of how to
 add environment variables into nginx config, so you have to use nginx from system.
-
 Qubie will be running on `https://localhost:443`.
+
+If you want to run Qubie via docker localy without nginx (not suitable for
+production!), run:
+
+    docker run --name qubie --link db:db --link memdb:memdb -e \
+     "SECRET_TOKEN=secret" -e "POSTGRES_USER=username" -e \
+     "POSTGRES_PASS=password" -e "AWS_ACCESS_KEY_ID=key" -e \
+     "AWS_SECRET_ACCESS_KEY=secret" -e "AWS_REGION=region" -e \
+     "NODE_ENV=docker_development" -d -p 5102:5102 \
+     username/qubie
+
+And then acces Qubie via `https://localhost:5102`.

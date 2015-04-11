@@ -1,4 +1,8 @@
 .git
+Dockerfile
+bower_components
+env.sh
+node_modules
 misc/logo.png
 misc/logo.svg
 misc/nginx.conf
