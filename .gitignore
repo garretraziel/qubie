@@ -11,3 +11,5 @@ heapdump-*
 env.sh
 misc/nginx_docker/server.key
 misc/nginx_docker/server.crt
+.settings
+typings
