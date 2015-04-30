@@ -7,8 +7,7 @@ define(function (require) {
     var io = require('socketio');
     var vex = require('vex');
     var vexdialog = require('vexdialog');
-    var PDFJS = require('pdfjs'); require('pdfjs_compat');
-    PDFJS.workerSrc = '/bower_components/pdfjs-dist/build/pdf.worker.js';
+    var pdf = require('pdf_viewer');
 
     var socket = io();
     var canvas = document.getElementById('cnvs');
@@ -17,9 +16,7 @@ define(function (require) {
     var c_height = window.innerHeight;
     canvas.width = c_width;
     canvas.height = c_height;
-    var loaded_pdf, loaded_page, original_viewport;
-    var render_promise, rerender_timeout;
-    var act_page = 1;
+    var pdfViewer = new pdf.PdfViewer(canvas, URL);
 
     var pencil_color = "black";
     var pencil_width = 2;
@@ -29,40 +26,8 @@ define(function (require) {
 
     vex.defaultOptions.className = 'vex-theme-plain';
 
-    function rerenderPageThen() {
-        if (loaded_page) {
-            var scale = canvas.height / original_viewport.height;
-            var scaledViewport = loaded_page.getViewport(scale);
-
-            var renderContext = {
-                canvasContext: context,
-                viewport: scaledViewport
-            };
-
-            render_promise = loaded_page.render(renderContext);
-        }
-    }
-
-    function rerenderPage() {
-        if (render_promise) {
-            render_promise.cancel();
-        }
-        rerenderPageThen();
-    }
-
-    function getPage() {
-        if (loaded_pdf) {
-            loaded_pdf.getPage(act_page).then(function (page) {
-                loaded_page = page;
-                original_viewport = page.getViewport(1);
-                rerenderPage();
-            });
-        }
-    }
-
     socket.on('page', function (page) {
-        act_page = page;
-        getPage();
+        pdfViewer.setPage(page);
     });
 
     socket.on('connect', function () {
@@ -116,33 +81,19 @@ define(function (require) {
     });
 
     $(document).ready(function () {
-        PDFJS.getDocument(URL).then(function (pdf) {
-            loaded_pdf = pdf;
-            getPage();
-        });
+        pdfViewer.loadDocument();
         $(window).resize(function () {
-            if (rerender_timeout) {
-                window.clearTimeout(rerender_timeout);
-            }
             c_width = window.innerWidth;
             c_height = window.innerHeight;
             canvas.width = c_width;
             canvas.height = c_height;
-            rerender_timeout = window.setTimeout(function () {
-                rerenderPage();
-            }, 500); // TODO: tohle resit trochu lip
+            pdfViewer.rerender();
         });
         $("body").keydown(function (e) {
             if (e.which === 37) {
-                if (act_page > 1) {
-                    act_page--;
-                    socket.emit('page', act_page);
-                    getPage();
-                }
+                socket.emit('page', pdfViewer.decPage());
             } else if (e.which === 39) {
-                act_page++;
-                socket.emit('page', act_page);
-                getPage();
+                socket.emit('page', pdfViewer.incPage());
             }
         });
         $("#presenter").change(function () {
