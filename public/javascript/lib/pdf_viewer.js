@@ -6,11 +6,12 @@ define(function (require) {
 
 	var PdfViewer = function (canvas, URL) {
 		this.canvas = canvas;
-		this.context = canvas.getContext('2d');
+		this.context = canvas[0].getContext('2d');
 		this.URL = URL;
 	};
 	
-	PdfViewer.prototype.loadDocument = function () {
+	PdfViewer.prototype.loadDocument = function (URL) {
+		this.URL = this.URL || URL;
 		PDFJS.getDocument(this.URL).then(function (pdf) {
 	    	this.loadedPdf = pdf;
 			this.actPage = this.actPage || 1;
@@ -31,12 +32,8 @@ define(function (require) {
 	    if (this.renderPromise) {
 	        this.renderPromise.cancel();
 	    }
-	    this.rerenderPageThen();
-	};
-	
-	PdfViewer.prototype.rerenderPageThen = function () {
 	    if (this.loadedPage) {
-	        var scale = this.canvas.height / this.originalViewport.height;
+	        var scale = this.canvas.height() / this.originalViewport.height;
 	        var scaledViewport = this.loadedPage.getViewport(scale);
 	
 	        var renderContext = {

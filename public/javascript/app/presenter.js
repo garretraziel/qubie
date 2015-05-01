@@ -8,15 +8,17 @@ define(function (require) {
     var vex = require('vex');
     var vexdialog = require('vexdialog');
     var FastClick = require('fastclick');
+    var pdf = require('pdf_viewer');
+    var Hammer = require('hammerjs');
     var socket = io();
-    var page;
 
-//    var canvas = document.getElementById('cnvs');
-//    var context = canvas.getContext('2d');
-//    var c_width = window.innerWidth;
-//    var c_height = window.innerHeight;
-//    canvas.width = c_width;
-//    canvas.height = c_height;
+    var canvas = document.getElementById('cnvs');
+    var jq_canvas = $("#cnvs");
+    var context = canvas.getContext('2d');
+    canvas.width = jq_canvas.width();
+    canvas.height = jq_canvas.height();
+    var pdfViewer = new pdf.PdfViewer(jq_canvas);
+    var hammertime = new Hammer(canvas);
 
     vex.defaultOptions.className = 'vex-theme-plain';
 
@@ -53,34 +55,38 @@ define(function (require) {
     socket.on('auth_completed', function () {
         //$("#leftbtn").removeAttr("disabled");
         //$("#rightbtn").removeAttr("disabled");
+        vexdialog.alert("Connected.");
     });
     socket.on('page', function (pagenum) {
-        page = pagenum;
+        pdfViewer.setPage(pagenum);
     });
-    socket.on('document_url', function (doc_url) {
-        vexdialog.alert(doc_url);
+    socket.on('document_url', function (docURL) {
+        pdfViewer.loadDocument(docURL);
     });
 
     FastClick.attach(document.body);
+    
+    hammertime.on('swiperight', function () {
+        socket.emit('page', pdfViewer.decPage());
+    });
+    
+    hammertime.on('swipeleft', function () {
+        socket.emit('page', pdfViewer.incPage());
+    });
 
     $(document).ready(function () {
         $("#leftbtn").on('click', function () {
-            if (page > 1) {
-                page--;
-                socket.emit('page', page);
-            }
+            socket.emit('page', pdfViewer.decPage());
         });
 
         $("#rightbtn").on('click', function () {
-            page++;
-            socket.emit('page', page);
+            socket.emit('page', pdfViewer.incPage());
         });
 
         $(window).resize(function () {
-//            c_width = window.innerWidth;
-//            c_height = window.innerHeight;
-//            canvas.width = c_width;
-//            canvas.height = c_height;
+            canvas.width = jq_canvas.width();
+            canvas.height = jq_canvas.height();
+            pdfViewer.rerender();
         });
 
         $('#cnvs').mousedown(function (e) {

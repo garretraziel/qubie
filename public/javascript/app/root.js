@@ -11,12 +11,11 @@ define(function (require) {
 
     var socket = io();
     var canvas = document.getElementById('cnvs');
+    var jq_canvas = $("#cnvs");
     var context = canvas.getContext('2d');
-    var c_width = window.innerWidth;
-    var c_height = window.innerHeight;
-    canvas.width = c_width;
-    canvas.height = c_height;
-    var pdfViewer = new pdf.PdfViewer(canvas, URL);
+    canvas.width = jq_canvas.width();
+    canvas.height = jq_canvas.height();
+    var pdfViewer = new pdf.PdfViewer(jq_canvas, URL);
 
     var pencil_color = "black";
     var pencil_width = 2;
@@ -26,8 +25,8 @@ define(function (require) {
 
     vex.defaultOptions.className = 'vex-theme-plain';
 
-    socket.on('page', function (page) {
-        pdfViewer.setPage(page);
+    socket.on('page', function (pagenum) {
+        pdfViewer.setPage(pagenum);
     });
 
     socket.on('connect', function () {
@@ -67,10 +66,10 @@ define(function (require) {
     });
 
     socket.on('pencil_event', function (coordinates) {
-        var from_x = c_width * coordinates.from[0];
-        var from_y = c_height * coordinates.from[1];
-        var to_x = c_width * coordinates.to[0];
-        var to_y = c_height * coordinates.to[1];
+        var from_x = jq_canvas.width() * coordinates.from[0];
+        var from_y = jq_canvas.height() * coordinates.from[1];
+        var to_x = jq_canvas.width() * coordinates.to[0];
+        var to_y = jq_canvas.height() * coordinates.to[1];
         context.beginPath();
         context.moveTo(from_x, from_y);
         context.lineTo(to_x, to_y);
@@ -83,10 +82,8 @@ define(function (require) {
     $(document).ready(function () {
         pdfViewer.loadDocument();
         $(window).resize(function () {
-            c_width = window.innerWidth;
-            c_height = window.innerHeight;
-            canvas.width = c_width;
-            canvas.height = c_height;
+            canvas.width = jq_canvas.width();
+            canvas.height = jq_canvas.height();
             pdfViewer.rerender();
         });
         $("body").keydown(function (e) {
