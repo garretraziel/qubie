@@ -3,7 +3,7 @@
 /*global pres_id*/
 
 define(function (require) {
-    var $ = require('jquery'); require('jquerymobile');
+    var $ = require('jquery');
     var io = require('socketio');
     var vex = require('vex');
     var vexdialog = require('vexdialog');
@@ -11,12 +11,12 @@ define(function (require) {
     var socket = io();
     var page;
 
-    var canvas = document.getElementById('cnvs');
-    var context = canvas.getContext('2d');
-    var c_width = window.innerWidth;
-    var c_height = window.innerHeight;
-    canvas.width = c_width;
-    canvas.height = c_height;
+//    var canvas = document.getElementById('cnvs');
+//    var context = canvas.getContext('2d');
+//    var c_width = window.innerWidth;
+//    var c_height = window.innerHeight;
+//    canvas.width = c_width;
+//    canvas.height = c_height;
 
     vex.defaultOptions.className = 'vex-theme-plain';
 
@@ -76,12 +76,11 @@ define(function (require) {
             socket.emit('page', page);
         });
 
-        //TODO: tohle presunout do knihovny zvlast
         $(window).resize(function () {
-            c_width = window.innerWidth;
-            c_height = window.innerHeight;
-            canvas.width = c_width;
-            canvas.height = c_height;
+//            c_width = window.innerWidth;
+//            c_height = window.innerHeight;
+//            canvas.width = c_width;
+//            canvas.height = c_height;
         });
 
         $('#cnvs').mousedown(function (e) {

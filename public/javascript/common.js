@@ -10,7 +10,6 @@ requirejs.config({
     },
     paths: {
         jquery: "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min",
-        jquerymobile: "//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min",
         jqueryvalidate: "/bower_components/jquery.validation/dist/jquery.validate",
         fastclick: "/bower_components/fastclick/lib/fastclick",
         socketio: "/socket.io/socket.io",
@@ -18,6 +17,7 @@ requirejs.config({
         vexdialog: "/bower_components/vex/js/vex.dialog.min",
         pdfjs: "/bower_components/pdfjs-dist/build/pdf",
         pdfjs_compat: "/bower_components/pdfjs-dist/web/compatibility",
+        hammerjs: "/bower_components/hammer.js/hammer.min",
         app: "../app"
     }
 });

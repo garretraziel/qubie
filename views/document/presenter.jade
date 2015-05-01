@@ -4,15 +4,13 @@ append head
     link(rel="stylesheet", href="/bower_components/vex/css/vex.css")
     link(rel="stylesheet", href="/bower_components/vex/css/vex-theme-plain.css")
     link(rel="stylesheet", href="/stylesheets/presenter.css")
-    link(rel="stylesheet", href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css")
     meta(name="viewport", content="width=device-width, initial-scale=1")
     script.
         var pres_id = !{ JSON.stringify(presenter_id) };
     script(data-main="/javascript/presenter_main", src="/bower_components/requirejs/require.js")
 
 block body
-    section
-        div#leftbtn
-        div#rightbtn
-    canvas#cnvs(width="300", height="150")
+    div#leftbtn
+    canvas#cnvs
         | Unfortunately, your browser doesn't support HTML5 canvas.
+    div#rightbtn
