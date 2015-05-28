@@ -9,7 +9,7 @@ requirejs.config({
         pdfjs_compat: ['pdfjs']
     },
     paths: {
-        jquery: "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min",
+        jquery: "/bower_components/jquery/dist/jquery.min",
         jqueryvalidate: "/bower_components/jquery.validation/dist/jquery.validate",
         fastclick: "/bower_components/fastclick/lib/fastclick",
         socketio: "/socket.io/socket.io",

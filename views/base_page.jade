@@ -4,37 +4,29 @@ block title
     | qb
 
 block body
-    .header-container
-        header.wrapper.clearfix
-            h1.title: a(href="/") qb
-            nav
-                ul
-                    li: a(href="/about")
-                            span.fa.fa-info-circle.icon
-                            | about
-                    if !logged_in
-                        li: a(href="/login")
-                                span.fa.fa-user.icon
-                                | login
-                    else
-                        li: a(href="/user")
-                                span.fa.fa-user.icon
-                                = username
-                    if admin
-                        li: a(href="/admin")
-                                span.fa.fa-terminal.icon
-                                | admin
+    header.flexbox-header
+        h1.header-logo: a(href="/") qb
+        nav.header-nav
+            a(href="/about")
+                span.fa.fa-info-circle.icon
+                | about
+            if !logged_in
+                a(href="/login")
+                    span.fa.fa-user.icon
+                    | login
+            else
+                a(href="/user")
+                    span.fa.fa-user.icon
+                    = username
+            if admin
+                a(href="/admin")
+                    span.fa.fa-terminal.icon
+                    | admin
 
     block before_content
 
-    if flash
-        .flash-container
-            p(class=flash.type)= flash.content
-
     .main-contaier
-        .main.wrapper.clearfix
-            block content
+        block content
 
-    .footer-container
-        footer.wrapper
-            | Garret made it
+    footer.flexbox-footer
+        | Garret made it
