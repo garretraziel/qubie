@@ -4,19 +4,16 @@ append head
     link(rel="stylesheet", href="/stylesheets/admin.css")
 
 block before_content
-    .submenu-container
-        .wrapper.clearfix
-            nav
-                ul
-                    li: a(href="/admin/users")
-                        span.fa.fa-user.icon
-                        | users
-                    li: a(href="/admin/teams")
-                        span.fa.fa-users.icon
-                        | teams
-                    li: a(href="/admin/documents")
-                        span.fa.fa-folder.icon
-                        | documents
-                    li: a(href="/logout")
-                        span.fa.fa-power-off.icon
-                        | logout
+    nav.submenu-nav
+        a(href="/admin/users")
+            span.fa.fa-user.icon
+            | users
+        a(href="/admin/teams")
+            span.fa.fa-users.icon
+            | teams
+        a(href="/admin/documents")
+            span.fa.fa-folder.icon
+            | documents
+        a(href="/logout")
+            span.fa.fa-power-off.icon
+            | logout
