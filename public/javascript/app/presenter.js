@@ -65,11 +65,11 @@ define(function (require) {
     });
 
     FastClick.attach(document.body);
-    
+
     hammertime.on('swiperight', function () {
         socket.emit('page', pdfViewer.decPage());
     });
-    
+
     hammertime.on('swipeleft', function () {
         socket.emit('page', pdfViewer.incPage());
     });
