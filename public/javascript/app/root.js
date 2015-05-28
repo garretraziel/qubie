@@ -55,7 +55,7 @@ define(function (require) {
 
     socket.on('presenter_url', function (url) {
         presenter_url = url;
-        vexdialog.alert('Presenter url: ' + url);
+        vexdialog.alert('Presenter url:<br/>' + url);
     });
 
     socket.on('qrcode_url', function (url) {

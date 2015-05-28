@@ -1,25 +1,28 @@
 body, html {
     width: 100%;
     height: 100%;
-    padding: 0px;
+    padding: 0;
+}
+
+.presenter-controls {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: space-around;
+    flex: 1;
 }
 
 div#leftbtn {
-    width: 25%;
-    height: 100%;
     background: red;
-    float: left;
+    flex-grow: 1;
 }
 
 div#rightbtn {
-    height: 100%;
     background: black;
-    width: 25%;
-    float: left;
+    flex-grow: 1;
 }
 
 canvas#cnvs {
-    height: 100%;
-    width: 50%;
-    float: left;
+    flex-grow: 2;
 }

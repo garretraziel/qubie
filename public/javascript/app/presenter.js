@@ -13,10 +13,8 @@ define(function (require) {
     var socket = io();
 
     var canvas = document.getElementById('cnvs');
-    var jq_canvas = $("#cnvs");
+    var jq_canvas = $(canvas);
     var context = canvas.getContext('2d');
-    canvas.width = jq_canvas.width();
-    canvas.height = jq_canvas.height();
     var pdfViewer = new pdf.PdfViewer(jq_canvas);
     var hammertime = new Hammer(canvas);
 
@@ -84,8 +82,6 @@ define(function (require) {
         });
 
         $(window).resize(function () {
-            canvas.width = jq_canvas.width();
-            canvas.height = jq_canvas.height();
             pdfViewer.rerender();
         });
 

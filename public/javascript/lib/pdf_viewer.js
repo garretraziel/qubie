@@ -34,8 +34,9 @@ define(function (require) {
                 //this.context.restore();
                 var canvas_width = this.canvas.width();
                 var canvas_height = this.canvas.height();
-                var scale_height = canvas_height / this.originalViewport.height;
-                var scale_width = canvas_width / this.originalViewport.width;
+                var originalViewport = this.loadedPage.getViewport(1);
+                var scale_height = canvas_height / originalViewport.height;
+                var scale_width = canvas_width / originalViewport.width;
                 var scale = Math.min(scale_height, scale_width);
                 var scaledViewport = this.loadedPage.getViewport(scale);
                 var translateX = (canvas_width - scaledViewport.width) / 2;
@@ -61,7 +62,6 @@ define(function (require) {
         if (this.loadedPdf) {
             this.loadedPdf.getPage(this.actPage).then(function (page) {
                 this.loadedPage = page;
-                this.originalViewport = page.getViewport(1);
                 this.rerenderPage();
             }.bind(this));
         }
@@ -88,7 +88,7 @@ define(function (require) {
         this.actPage++;
         this.getPage();
         return this.actPage;
-    }
+    };
 
     return {
         PdfViewer: PdfViewer
