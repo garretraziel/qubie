@@ -38,29 +38,29 @@ module.exports = function (config, db, s3bucket) {
         if (req.query.search_name) {
             db.User.findAll({
                 where: ["username like ?", '%' + req.query.search_name + '%']
-            }).success(function (users) {
+            }).then(function (users) {
                 res.render('admin/users', {users: users});
             });
         } else if (req.query.search_email) {
-            db.User.findAll({where: {email: req.query.search_email}}).success(function (users) {
+            db.User.findAll({where: {email: req.query.search_email}}).then(function (users) {
                 res.render('admin/users', {users: users});
             });
         } else {
-            db.User.all().success(function (users) {
+            db.User.all().then(function (users) {
                 res.render('admin/users', {users: users});
             });
         }
     });
     router.get('/user/:database_id', function (req, res) {
-        db.User.find(req.params.database_id).success(function (user) {
+        db.User.find(req.params.database_id).then(function (user) {
             if (user === null) {
                 res.render('404');
             } else {
                 async.parallel({
                     documents: function (callback) {
-                        user.getDocuments().success(function (documents) {
+                        user.getDocuments().then(function (documents) {
                             callback(null, documents);
-                        }).error(function (err) {
+                        }).catch(function (err) {
                             callback(err);
                         });
                     },
@@ -81,7 +81,7 @@ module.exports = function (config, db, s3bucket) {
     });
     router.route('/user/:database_id/edit')
         .get(function (req, res) {
-            db.User.find(req.params.database_id).success(function (user) {
+            db.User.find(req.params.database_id).then(function (user) {
                 if (user === null) {
                     res.render('404');
                 } else {
@@ -110,7 +110,7 @@ module.exports = function (config, db, s3bucket) {
         });
     router.route('/user/:database_id/delete')
         .get(function (req, res) {
-            db.User.find(req.params.database_id).success(function (user) {
+            db.User.find(req.params.database_id).then(function (user) {
                 if (user === null) {
                     res.render('404');
                 } else {
@@ -122,14 +122,14 @@ module.exports = function (config, db, s3bucket) {
             if (req.body.input === "delete") {
                 async.waterfall([
                     function (callback) {
-                        db.User.find(req.params.database_id).success(function (user) {
+                        db.User.find(req.params.database_id).then(function (user) {
                             callback(null, user);
                         }).error(function (err) {
                             callback(err);
                         });
                     },
                     function (user, callback) {
-                        user.getDocuments().success(function (documents) {
+                        user.getDocuments().then(function (documents) {
                             callback(null, user, documents);
                         }).error(function (err) {
                             callback(err);
@@ -183,27 +183,27 @@ module.exports = function (config, db, s3bucket) {
         if (req.query.search_name) {
             db.Document.findAll({
                 where: ["name like ?", '%' + req.query.search_name + '%']
-            }).success(function (documents) {
+            }).then(function (documents) {
                 res.render('admin/documents', {documents: documents});
             });
         } else if (req.query.search_key) {
-            db.Document.findAll({where: {key: req.query.search_key}}).success(function (documents) {
+            db.Document.findAll({where: {key: req.query.search_key}}).then(function (documents) {
                 res.render('admin/documents', {documents: documents});
             });
         } else {
-            db.Document.all().success(function (documents) {
+            db.Document.all().then(function (documents) {
                 res.render('admin/documents', {documents: documents});
             });
         }
     });
     router.get('/document/:database_id', function (req, res) {
-        db.Document.find(req.params.database_id).success(function (document) {
+        db.Document.find(req.params.database_id).then(function (document) {
             if (document === null) {
                 res.render('404');
             } else {
-                document.getUser().success(function (user) {
+                document.getUser().then(function (user) {
                     res.render('admin/document_detail', {document: document, user: user});
-                }).error(function (err) {
+                }).catch(function (err) {
                     winston.error('during reading document owner: %s', String(err));
                     res.render('admin/document_detail', {document: document});
                 });
@@ -212,11 +212,11 @@ module.exports = function (config, db, s3bucket) {
     });
     router.route('/document/:database_id/edit')
         .get(function (req, res) {
-            db.Document.find(req.params.database_id).success(function (document) {
+            db.Document.find(req.params.database_id).then(function (document) {
                 if (document === null) {
                     res.render('404');
                 } else {
-                    document.getUser().success(function (user) {
+                    document.getUser().then(function (user) {
                         res.render('admin/document_edit', {document: document, user: user});
                     });
                 }

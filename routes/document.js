@@ -43,7 +43,7 @@ module.exports = function (config, db, memstore) {
                 } else {
                    res.redirect('/fail');
                 }
-            }, function (err) {
+            }).catch(function (err) {
                 winston.error("during reading document: %s", String(err));
                 res.redirect('/fail');
             });
@@ -71,7 +71,7 @@ module.exports = function (config, db, memstore) {
                 } else {
                     res.redirect('/fail');
                 }
-            }, function (err) {
+            }).catch(function (err) {
                 winston.error("during reading document: %s", String(err));
                 res.redirect('/fail');
             });
@@ -95,7 +95,7 @@ module.exports = function (config, db, memstore) {
             if (id === false) {
                 res.redirect('/fail');
             } else {
-                db.Document.find(id).success(function (document) {
+                db.Document.find(id).then(function (document) {
                     if (document === null) {
                         winston.error('when trying to render document that isn`t in database');
                         res.redirect('/fail');

@@ -22,9 +22,9 @@ module.exports = function (config, db, memstore, s3bucket) {
     router.get('/', function (req, res) {
         async.parallel({
             documents: function (callback) {
-                req.user.getDocuments().success(function (documents) {
+                req.user.getDocuments().then(function (documents) {
                     callback(null, documents);
-                }).error(function (err) {
+                }).catch(function (err) {
                     callback(err);
                 });
             },

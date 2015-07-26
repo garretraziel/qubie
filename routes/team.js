@@ -39,7 +39,7 @@ module.exports = function (config, db, memstore) {
                     res.render('team', {users: users, team: team, used_space: used_space});
                 }
             });
-        }, function (err) {
+        }).catch(function (err) {
             winston.error("during rendering team with users: %s", String(err));
             res.redirect('/fail');
         });
