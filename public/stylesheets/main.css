@@ -209,7 +209,7 @@ textarea {
 .feature {
     flex-grow: 1;
     flex-shrink: 0;
-    flex-basis: 300px;
+    flex-basis: 400px;
     margin: 15px;
 }
 

@@ -13,6 +13,9 @@ define(function (require) {
     var socket = io();
 
     var canvas = document.getElementById('cnvs');
+    var bounding_rect = canvas.getBoundingClientRect();
+    canvas.width = bounding_rect.width;
+    canvas.height = bounding_rect.height;
     var jq_canvas = $(canvas);
     var context = canvas.getContext('2d');
     var pdfViewer = new pdf.PdfViewer(jq_canvas);
@@ -82,6 +85,9 @@ define(function (require) {
         });
 
         $(window).resize(function () {
+            bounding_rect = canvas.getBoundingClientRect();
+            canvas.width = bounding_rect.width;
+            canvas.height = bounding_rect.height;
             pdfViewer.rerender();
         });
 
