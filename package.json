@@ -1,9 +1,9 @@
 {
-  "name": "qb",
+  "name": "qubie",
   "version": "0.0.1",
   "private": true,
   "description": "Web app for controlling presentations using smartphones and tablets",
-  "author": "Jan Sedlák <boloomka@gmail.com>",
+  "author": "Jan Sedlák <mail@jansedlak.cz>",
   "scripts": {
     "start": "node server.js",
     "test": "./node_modules/mocha/bin/mocha test"

@@ -1,8 +1,8 @@
 {
-  "name": "qb",
+  "name": "qubie",
   "version": "0.0.1",
   "authors": [
-    "garretraziel <boloomka@gmail.com>"
+    "Jan Sedlák <mail@jansedlak.cz>"
   ],
   "description": "Web app for controlling presentations using smartphones and tablets",
   "moduleType": [

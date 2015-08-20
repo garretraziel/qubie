@@ -1,6 +1,7 @@
 .git
 Dockerfile
 .dockerignore
+.travis.yml
 bower_components
 env.sh
 node_modules

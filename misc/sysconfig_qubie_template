@@ -1,8 +1,12 @@
 NODE_ENV=production
 SECRET_TOKEN=your_super_secret_hexa_here
-POSTGRES_URL=postgres://user:password@localhost/db
-REDIS_URL=redis://localhost:port
+POSTGRES_USER=user
+POSTGRES_PASSWORD=password
+POSTGRES_SERVER=localhost
+POSTGRES_DB=db
+REDIS_URI=redis://localhost:port
 LEVEL_DB=/path/to/leveldb
+LINK_URL=https://www.getqubie.com
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 AWS_REGION=
