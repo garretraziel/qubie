@@ -144,9 +144,8 @@ describe('secure', function () {
                 var user = createUser(hashed_password);
                 var db = createDummyDb(user, null, {});
                 var strategy = secure.createLocalStrategyVerify(db);
-                var serialize = secure.createSerializeUser(db);
                 strategy("user", "password", function (err, user) {
-                    serialize(user, function (err, result) {
+                    secure.serializeUser(user, function (err, result) {
                         assert.equal(err, null);
                         assert.equal(result, user_id);
                         done();
@@ -186,6 +185,27 @@ describe('secure', function () {
                 assert(err instanceof Error);
                 done();
             });
+        });
+    });
+
+    describe('#resolveBodyValue', function () {
+        it('should return false when value is null', function () {
+            assert.equal(false, secure.resolveBodyValue(null));
+        });
+
+        it('should return false when value is undefined', function () {
+            assert.equal(false, secure.resolveBodyValue(undefined));
+        });
+
+        it('should return null when value is empty string', function () {
+            assert.equal(null, secure.resolveBodyValue(""));
+        });
+
+        it("should return given value when it's not empty string, null or undefined", function () {
+            assert.equal(1, secure.resolveBodyValue(1));
+            assert.equal("Hello, world!", secure.resolveBodyValue("Hello, world!"));
+            assert.deepEqual({value: 15}, secure.resolveBodyValue({value: 15}));
+            assert.equal(true, secure.resolveBodyValue(true));
         });
     });
 
