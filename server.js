@@ -26,7 +26,12 @@ var memstore = memdb.init(config);
 var drawstore = drawdb.init(config);
 var server;
 
-function runServer() {
+function runServer(err) {
+    if (err) {
+        winston.error('during syncing database: %s', String(err));
+        return process.exit(1);
+    }
+
     var sessionStore = new RedisStore({client: memstore});
 
     setup.settings(app, config, db, sessionStore);
@@ -45,11 +50,4 @@ function runServer() {
     });
 }
 
-db.sequelize.sync().complete(function (err) {
-    if (err) {
-        winston.error('during syncing database: %s', String(err));
-        process.exit(1);
-    } else {
-        runServer();
-    }
-});
+db.sequelize.sync().complete(runServer);
