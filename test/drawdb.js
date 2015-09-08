@@ -15,7 +15,9 @@ function createLeveldb(init_values, fail_put) {
         if (this.hasOwnProperty(id)) {
             callback(null, this[id]);
         } else {
-            callback(new Error("value does not exist"));
+            var e = new Error("value does not exist");
+            e.notFound = true;
+            callback(e);
         }
     };
     db.put = function (id, value, callback) {
@@ -120,7 +122,8 @@ describe('drawdb', function () {
             content[id_page] = [oldvalue, value];
             content[id] = [page];
             var db = createLeveldb(content, false);
-            drawdb.getDrawingEventsForPage(db, id, page, function (result) {
+            drawdb.getDrawingEventsForPage(db, id, page, function (err, result) {
+                assert.equal(err, null);
                 assert.deepEqual(result, [oldvalue, value]);
                 done();
             });
@@ -128,7 +131,8 @@ describe('drawdb', function () {
 
         it('should return empty array when there is no event', function (done) {
             var db = createLeveldb({}, false);
-            drawdb.getDrawingEventsForPage(db, id, page, function (result) {
+            drawdb.getDrawingEventsForPage(db, id, page, function (err, result) {
+                assert.equal(err, null);
                 assert.deepEqual(result, []);
                 done();
             });

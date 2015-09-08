@@ -28,7 +28,8 @@ var server;
 
 function runServer(err) {
     if (err) {
-        winston.error('during syncing database: %s', String(err));
+        // err is array of three errors
+        winston.error('during syncing database:', err[0]);
         return process.exit(1);
     }
 
