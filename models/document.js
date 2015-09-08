@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define("Document", {
+    var Document = sequelize.define("Document", {
         name: DataTypes.STRING,
         key: DataTypes.STRING,
         ppt_key: DataTypes.STRING,
@@ -10,5 +10,15 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.FLOAT
         }
         //...
+    }, {
+        classMethods: {
+            associate: function (models) {
+                Document.belongsTo(models.User, {
+                    onDelete: "CASCADE"
+                });
+                Document.hasMany(models.View);
+            }
+        }
     });
+    return Document;
 };

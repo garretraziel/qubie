@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define("Team", {
+    var Team = sequelize.define("Team", {
         email: DataTypes.STRING,
         premium_to: DataTypes.DATE,
 
@@ -13,16 +13,23 @@ module.exports = function (sequelize, DataTypes) {
     }, {
         instanceMethods: {
             used_space: function (done) {
-                this.getDocuments().success(function (documents) {
+                this.getDocuments().then(function (documents) {
                     var used = 0;
                     documents.forEach(function (document) {
                         used += document.size;
                     });
                     done(null, used);
-                }).error(function (err) {
+                }).catch(function (err) {
                     done(err);
                 });
             }
+        },
+        classMethods: {
+            associate: function (models) {
+                Team.hasMany(models.User);
+                Team.hasOne(models.User, {as: "Administrator"});
+            }
         }
     });
+    return Team;
 };

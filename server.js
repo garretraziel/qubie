@@ -18,13 +18,16 @@ var bc11m = require('./lib/bc11n');
 var memdb = require('./lib/memdb');
 var drawdb = require('./lib/drawdb');
 
+var models = require('./models');
+
 var app = express();
 var config = configuration[app.get('env')];
+var db = models(config);
 var memstore = memdb.init(config);
 var drawstore = drawdb.init(config);
 var server;
 
-function runServer(db) {
+function runServer() {
     var sessionStore = new RedisStore({client: memstore});
 
     setup.settings(app, config, db, sessionStore);
@@ -43,10 +46,6 @@ function runServer(db) {
     });
 }
 
-setup.database(config, function (err, db) {
-    if (err) {
-        winston.error('during syncing database: %s', String(err));
-    } else {
-        runServer(db);
-    }
+db.sequelize.sync().then(runServer).catch(function (err) {
+    winston.error('during syncing database: %s', String(err));
 });
