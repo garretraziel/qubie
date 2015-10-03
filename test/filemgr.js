@@ -23,6 +23,11 @@ describe('filemgr', function () {
             var createdObject = {};
             createdObject.setUser = function (user_to_set) {
                 assert.equal(user_to_set, user);
+                return {
+                    then: function (after) {
+                        after();
+                    }
+                }
             };
             var db = createDummyDb(null, createdObject, {});
             filemgr.uploadAndSaveFile(s3bucket, stream, user, db, function (err) {
