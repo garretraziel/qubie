@@ -1,7 +1,7 @@
 qubie
 =====
 
-[![Build Status](https://magnum.travis-ci.com/garretraziel/qubie.svg?token=5QVoyJUFv7JDsLhsxyrx&branch=master)](https://magnum.travis-ci.com/garretraziel/qubie)
+[![Build Status](https://travis-ci.org/garretraziel/qubie.svg?branch=master)](https://travis-ci.org/garretraziel/qubie)
 
 Web app for controlling presentations using smartphones and tablets.
 
